@@ -39,9 +39,15 @@ ui <- fluidPage(
                     uiOutput("gene_link")  # New UI output for the link
              )
            ),
+           # Dropdown for selecting which rda file (gene set source)
+           selectInput("my_GeneSetSource",
+                       label = "Gene Set Source",
+                       choices = names(allGeneSetList)),
+           # Dropdown for selecting the gene set within the chosen rda file.
+           # Start with no selection
            selectInput("my_GeneSet",
                        label = "Gene Set (Will label genes yellow)",
-                       choices = names(allGeneSets))
+                       choices = NULL)
     ),
     
     column(width = 5,
@@ -53,13 +59,20 @@ ui <- fluidPage(
 )
 
 # Define server logic ----
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   # Gene Link
   output$gene_link <- renderUI({
     req(input$my_GeneID)  # Ensure there's a valid input
     url <- paste0("https://mycobrowser.epfl.ch/genes/", input$my_GeneID)
     tags$a(href = url, target = "_blank", paste0("View Details of ", input$my_GeneID, " on Mycobrowser"))
+  })
+  
+  # When a new gene set source is selected, update the gene set dropdown
+  observeEvent(input$my_GeneSetSource, {
+    updateSelectInput(session, "my_GeneSet",
+                      choices = names(allGeneSetList[[input$my_GeneSetSource]]),
+                      selected = NULL)
   })
   
   # Volcano Plot
@@ -71,7 +84,8 @@ server <- function(input, output) {
     
     # Add data for labelling a gene set
     gene_set <- list_dfs_2[[input$my_comparison]] %>%
-      filter(GENE_ID %in% allGeneSets[[input$my_GeneSet]])
+      filter(GENE_ID %in% allGeneSetList[[input$my_GeneSetSource]][[input$my_GeneSet]])
+    
     
     my_volcano <- list_dfs_2[[input$my_comparison]] %>%
       ggplot(aes(x = LOG2FOLD, y = -log10(AVG_PVALUE), col = DE, label = DE_labels, text = GENE_ID, label2 = GENE_NAME, label3 = PRODUCT)) + 

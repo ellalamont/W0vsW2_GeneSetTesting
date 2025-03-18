@@ -119,6 +119,16 @@ for (file in rda_files) {
 rm(env)  # Remove the temporary environment
 
 
+# To put them in a list of lists
+rda_files <- list.files("GeneSet_Data", pattern = "\\.rda$", full.names = TRUE)
+allGeneSetList <- list()
 
+for(file in rda_files) {
+  file_name <- tools::file_path_sans_ext(basename(file))
+  env <- new.env()
+  load(file, envir = env)  # loads allGeneSets into env
+  allGeneSetList[[file_name]] <- env$allGeneSets  # store it in our list
+  rm(env)
+}
 
 
