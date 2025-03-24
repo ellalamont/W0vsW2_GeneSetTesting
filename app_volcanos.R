@@ -20,7 +20,7 @@ my_plot_themes <- theme_bw() +
 
 # Define UI ----
 ui <- fluidPage(
-  titlePanel("MICROM 431 Volcanos"),
+  titlePanel("Sputum Volcanos"),
   
   fluidRow(
     
@@ -39,6 +39,8 @@ ui <- fluidPage(
                     uiOutput("gene_link")  # New UI output for the link
              )
            ),
+           # Add checkbox to toggle gene set points
+           checkboxInput("show_gene_set", label = "Show gene sets", value = TRUE),
            # Dropdown for selecting which rda file (gene set source)
            selectInput("my_GeneSetSource",
                        label = "Gene Set Source",
@@ -92,8 +94,13 @@ server <- function(input, output, session) {
       geom_point() + 
       
       # Add a differently colored point
-      geom_point(data = gene_set, color = "yellow", aes(col = DE, label = DE_labels, text = GENE_ID)) + 
-      geom_point(data = single_gene, color = "orange", aes(col = DE, label = DE_labels, text = GENE_ID)) + 
+      geom_point() +
+      # Conditionally add the gene set points (yellow) based on checkbox value
+      { if(input$show_gene_set) 
+        geom_point(data = gene_set, color = "yellow", aes(col = DE, label = DE_labels, text = GENE_ID))
+        else 
+          NULL } +
+      geom_point(data = single_gene, color = "yellow", aes(col = DE, label = DE_labels, text = GENE_ID)) + 
       
       labs(title = input$my_comparison) + 
       geom_vline(xintercept = c(-1,1), col = "grey", linetype = "dashed") + 
