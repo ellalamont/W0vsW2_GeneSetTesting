@@ -46,17 +46,21 @@ options(scipen = 999)
 ###########################################################
 ################### IMPORT BOB's DE DATA ##################
 
-`Volcano Plot A: Consequences of upregulating Rv0494` <- read.delim("JOINED_BobAverages/MTb.MetaResults.RV0494_RIF_DMSOvsATC/Rv0494_ATC_RIF.MTb.Meta.JOINED.txt")
-`Volcano Plot B: Change in bacterial transcriptome after 2 weeks antibiotic treatment` <- read.delim("JOINED_BobAverages/MTb.MetaResults.W2_vs_W0/W2.MTb.Meta.JOINED.txt")
+# Don't know why these are only working with the full pathname....
+`W0.ComparedTo.Broth` <- read.delim("/Users/snork-maiden/Documents/Micro_grad_school/Sherman_Lab/R_projects/W0vsW2_GeneSetTesting/JOINED_BobAverages/MTb.MetaResults.W0_vs_Broth/W0.MTb.Meta.JOINED.txt")
+`W2.ComparedTo.W0` <- read.delim("JOINED_BobAverages/MTb.MetaResults.W2_vs_W0/W2.MTb.Meta.JOINED.txt")
+`W2.ComparedTo.Broth` <- read.delim("/Users/snork-maiden/Documents/Micro_grad_school/Sherman_Lab/R_projects/W0vsW2_GeneSetTesting/JOINED_BobAverages/MTb.MetaResults.W2_vs_Broth/W2.MTb.Meta.JOINED.txt")
 
 ###########################################################
 ################ MAKE A LIST OF ALL DFs ###################
-list_dfs <- list(`Volcano Plot A: Consequences of upregulating Rv0494`,
-                 `Volcano Plot B: Change in bacterial transcriptome after 2 weeks antibiotic treatment`)
+list_dfs <- list(`W0.ComparedTo.Broth`,
+                 `W2.ComparedTo.W0`, 
+                 `W2.ComparedTo.Broth`)
 
 # Make a list of the names
-df_names <- c("Volcano Plot A: Consequences of upregulating Rv0494",
-              "Volcano Plot B: Change in bacterial transcriptome after 2 weeks antibiotic treatment")
+df_names <- c("W0.ComparedTo.Broth",
+              "W2.ComparedTo.W0", 
+              "W2.ComparedTo.Broth")
 
 # Give the df list the correct df names
 names(list_dfs) <- df_names
