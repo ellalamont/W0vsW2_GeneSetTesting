@@ -8,18 +8,21 @@ library(ggplot2)
 library(tidyverse)
 library(ggpubr)
 library(RColorBrewer)
-# library(knitr)
+library(knitr)
 library(plotly)
-# library(ggprism) # for add_pvalue()
-# library(rstatix) # for adjust_pvalue
-# library(ggpmisc) # https://stackoverflow.com/questions/7549694/add-regression-line-equation-and-r2-on-graph
+library(ggprism) # for add_pvalue()
+library(rstatix) # for adjust_pvalue
+library(ggpmisc) # https://stackoverflow.com/questions/7549694/add-regression-line-equation-and-r2-on-graph
 library(ggrepel)
-# library(pheatmap)
-# library(ggplotify) # To convert pheatmaps to ggplots
-# library(corrplot)
-# library(ggcorrplot)
-# library(ggfortify) # To make pca plots with plotly
+library(pheatmap)
+library(ggplotify) # To convert pheatmaps to ggplots
+library(corrplot)
+library(ggcorrplot)
+library(ggfortify) # To make pca plots with plotly
 
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+BiocManager::install("Biobase")
 
 
 cbPalette_1 <- c("#999999", "#E69F00") # Gold and Grey
@@ -47,9 +50,9 @@ options(scipen = 999)
 ################### IMPORT BOB's DE DATA ##################
 
 # Don't know why these are only working with the full pathname....
-`W0.ComparedTo.Broth` <- read.delim("/Users/snork-maiden/Documents/Micro_grad_school/Sherman_Lab/R_projects/W0vsW2_GeneSetTesting/JOINED_BobAverages/MTb.MetaResults.W0_vs_Broth/W0.MTb.Meta.JOINED.txt")
+`W0.ComparedTo.Broth` <- read.delim("JOINED_BobAverages/MTb.MetaResults.W0_vs_Broth/W0.MTb.Meta.JOINED.txt")
 `W2.ComparedTo.W0` <- read.delim("JOINED_BobAverages/MTb.MetaResults.W2_vs_W0/W2.MTb.Meta.JOINED.txt")
-`W2.ComparedTo.Broth` <- read.delim("/Users/snork-maiden/Documents/Micro_grad_school/Sherman_Lab/R_projects/W0vsW2_GeneSetTesting/JOINED_BobAverages/MTb.MetaResults.W2_vs_Broth/W2.MTb.Meta.JOINED.txt")
+`W2.ComparedTo.Broth` <- read.delim("JOINED_BobAverages/MTb.MetaResults.W2_vs_Broth/W2.MTb.Meta.JOINED.txt")
 
 ###########################################################
 ################ MAKE A LIST OF ALL DFs ###################
@@ -134,5 +137,63 @@ for(file in rda_files) {
   allGeneSetList[[file_name]] <- env$allGeneSets  # store it in our list
   rm(env)
 }
+
+###########################################################
+############ IMPORT AND PROCESS ALL TPM VALUES ############
+# NOT scaled
+
+# ProbeTest5_tpm <- read.csv("ProbeTest5_Mtb.Expression.Gene.Data.SCALED.TPM.csv")
+ProbeTest5_tpm <- read.csv("tpm_data/ProbeTest5_Mtb.Expression.Gene.Data.TPM_moreTrim.csv") # This has the 3' end trimmed 40bp to increase the number of reads aligning
+ProbeTest4_tpm <- read.csv("tpm_data/ProbeTest4_Mtb.Expression.Gene.Data.TPM.csv")
+ProbeTest3_tpm <- read.csv("tpm_data/ProbeTest3_Mtb.Expression.Gene.Data.TPM.csv")
+
+# Need to remove the undetermined which all share names
+ProbeTest5_tpm$Undetermined_S0 <- NULL
+ProbeTest4_tpm$Undetermined_S0 <- NULL
+ProbeTest3_tpm$Undetermined_S0 <- NULL
+
+# Merge the 3 documents
+All_tpm <- merge(ProbeTest5_tpm, ProbeTest4_tpm, all = T)
+All_tpm <- merge(All_tpm, ProbeTest3_tpm, all = T)
+
+# Adjust the names so they are slightly shorter
+names(All_tpm) <- gsub(x = names(All_tpm), pattern = "_S.*", replacement = "") # This regular expression removes the _S and everything after it (I think...)
+
+rownames(All_tpm) <- All_tpm[,1] # add the rownames
+
+
+###########################################################
+#################### SUBSET TPM VALUES ####################
+# Just grab the sputum and broth samples that I want
+
+# Unique Sputum: 
+# W0 samples: "S_250754", "S_355466", "S_503557" 
+# W2 samples: "S_349941_Probe_3D_25", "S_503937", "S_575533_MtbrRNA", "S_577208"
+# W4 samples: "S_351946_Probe_4A_100", "S_687338_Probe_4A_100"
+
+# Unique Sputum above 1M reads
+# W0 samples: "S_250754", "S_355466", "S_503557" 
+# W2 samples: "S_503937", "S_575533_MtbrRNA", "S_577208"
+
+# Uncaptured Ra broth samples
+# "H37Ra_Broth_4", "H37Ra_Broth_5", "H37Ra_Broth_6"
+
+my_sample_names <- c("S_250754", "S_355466", "S_503557", "S_503937", "S_575533_MtbrRNA", "S_577208", "H37Ra_Broth_4", "H37Ra_Broth_5", "H37Ra_Broth_6")
+W0vsBroth_sample_names <- c("S_250754", "S_355466", "S_503557", "H37Ra_Broth_4", "H37Ra_Broth_5", "H37Ra_Broth_6")
+
+my_tpm <- All_tpm %>% select(all_of(my_sample_names))
+my_tpm_W0vsBroth <- All_tpm %>% select(all_of(W0vsBroth_sample_names))
+
+
+
+
+
+
+
+
+
+
+
+
 
 
