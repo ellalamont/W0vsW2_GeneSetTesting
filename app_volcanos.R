@@ -40,7 +40,7 @@ ui <- fluidPage(
              )
            ),
            # Add checkbox to toggle gene set points
-           checkboxInput("show_gene_set", label = "Show gene sets", value = TRUE),
+           checkboxInput("show_gene_set", label = "Show gene sets", value = FALSE),
            # Dropdown for selecting which rda file (gene set source)
            selectInput("my_GeneSetSource",
                        label = "Gene Set Source",

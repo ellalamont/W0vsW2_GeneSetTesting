@@ -31,11 +31,11 @@ make_volcano_function <- function(my_df, graph_title) {
   
   my_volcano <- my_df %>%
     ggplot(aes(x = LOG2FOLD, y = -log10(AVG_PVALUE), col = DE, label = DE_labels, text = GENE_NAME, label2 = GENE_ID)) + # text is for plotly, could be GENE_ID
-    geom_point() + 
+    geom_point(alpha = 0.7) + 
     labs(title = graph_title) + 
     geom_vline(xintercept = c(-1,1), col = "grey", linetype = "dashed") + 
     geom_hline(yintercept = -log10(0.05), col = "grey", linetype = "dashed") + 
-    geom_text_repel(max.overlaps = 10, size = 3) +  # Can do geom_text_repel or geom_label_rebel
+    # geom_text_repel(max.overlaps = 10, size = 3) +  # Can do geom_text_repel or geom_label_rebel
     
     # Need it this way so the colors aren't messed up by not having significant up or down
     # scale_color_manual(values = c("#00AFBB", "grey", "#bb0c00")) + 
@@ -62,14 +62,14 @@ make_volcano_function <- function(my_df, graph_title) {
 ###########################################################
 ############### MAKE A SINGLE VOLCANO PLOT ################
 
-# my_path <- "Volcano_plot_figures"
+my_path <- "Volcano_plot_figures"
 single_plot <- make_volcano_function(list_dfs_2[[1]], df_names[1])
 single_plot
 ggsave(single_plot,
        file = paste0(df_names[1], ".pdf"),
-       # path = my_path,
+       path = my_path,
        width = 6, height = 4, units = "in")
-ggplotly(single_plot)
+# ggplotly(single_plot)
 
 
 
