@@ -8,7 +8,7 @@
 # I've just imported the DEG values now, not the tpm.... I guess just start with these, compare everything to broth
 # No, this won't work because I need the replicates separated... need the tpm for all the samples...
 
-# Start with my_tpm_W0vsBroth
+# Start with my_tpm_W0vsBroth, also my_tpm which has all the unique sputum >1M and the broth
 
 ###########################################################
 ###################### PROCESS DATA #######################
@@ -35,7 +35,7 @@ my_tpm_W0vsBroth_filtered100 <- my_tpm_W0vsBroth %>%
 # Now there are only 1341 rows! 
 
 # Change to a matrix?
-my_tpm_W0vsBroth_matrix <- as.matrix(my_tpm_W0vsBroth_filtered10)
+my_tpm_W0vsBroth_matrix <- as.matrix(my_tpm_W0vsBroth_filtered100)
 
 
 ###########################################################
@@ -43,8 +43,44 @@ my_tpm_W0vsBroth_matrix <- as.matrix(my_tpm_W0vsBroth_filtered10)
 
 # Not normalizing them because they are already in tpm, not sure if this is right....
 
-pheatmap(my_tpm_W0vsBroth_matrix)
+pheatmap(my_tpm_W0vsBroth_matrix[1:10,], scale = "row")
+
+# I need to scale by row to see anything...  not sure what is happening...
+
+my_tpm_W0vsBroth_matrix[1:10,]
 
 
+# Trying to subset based on gene set list
+
+testing <- my_tpm_W0vsBroth %>% subset(rownames(my_tpm_W0vsBroth) %in% MTb.TB.Phenotypes.TopGeneSets$`human_sputum: top 50 genes`) # Guess this doesn't need to be a matrix
+
+pheatmap(testing, scale = "row")
+
+testing <- my_tpm %>% subset(rownames(my_tpm) %in% MTb.TB.Phenotypes.TopGeneSets$`human_sputum: top 50 genes`) # Guess this doesn't need to be a matrix
+
+my_annotation_colors <- list(
+  Week = c("0" = "#0072B2",  # Blue
+           "2" = "#E66900",  # Orange
+           "Broth" = "#999999")  # Grey
+)
+
+pheatmap(testing, 
+         annotation_col = my_pipeSummary["Week"], 
+         # annotation_row = gene_annot["Product"],
+         annotation_colors = my_annotation_colors,
+         scale = "row")
 
 
+###########################################################
+################### TESTING FOR SHINY #####################
+
+
+allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["microaerophilic: top 25 genes"]]
+my_data <- my_tpm[rownames(my_tpm) %in% allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["microaerophilic: top 25 genes"]], ]
+testing <- my_tpm %>% subset(rownames(my_tpm) %in% allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["microaerophilic: top 25 genes"]])
+identical(my_data, testing) # TRUE
+p <- pheatmap(my_data, 
+              annotation_col = my_pipeSummary["Week"], 
+              annotation_colors = my_annotation_colors,
+              scale = "row")
+heatmap(as.matrix(my_data))

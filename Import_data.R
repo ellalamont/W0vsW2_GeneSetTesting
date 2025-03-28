@@ -20,9 +20,9 @@ library(corrplot)
 library(ggcorrplot)
 library(ggfortify) # To make pca plots with plotly
 
-if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-BiocManager::install("Biobase")
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+# BiocManager::install("Biobase")
 
 
 cbPalette_1 <- c("#999999", "#E69F00") # Gold and Grey
@@ -139,6 +139,14 @@ for(file in rda_files) {
 }
 
 ###########################################################
+############### IMPORT H37Rv GENE ANNOTATION ##############
+
+gene_annot <- read.delim("H37Rv.txt")
+row.names(gene_annot) <- gene_annot$Locus.Tag
+
+
+
+###########################################################
 ############ IMPORT AND PROCESS ALL TPM VALUES ############
 # NOT scaled
 
@@ -186,11 +194,55 @@ my_tpm_W0vsBroth <- All_tpm %>% select(all_of(W0vsBroth_sample_names))
 
 
 
+###########################################################
+############### IMPORT PIPELINE SUMMARY DATA ##############
+# Importing the ProbeTests 3 and 4 and 5 to get all the sputum samples I have done
 
+# ProbeTest5_pipeSummary <- read.csv("ProbeTest5_Pipeline.Summary.Details.csv")
+# This has been edited to include more metadata!
+ProbeTest5_pipeSummary <- read.csv("ProbeTest5_Pipeline.Summary.Details_moreTrim.csv") # This has the 3' end trimmed 40bp to increase the number of reads aligning
+ProbeTest4_pipeSummary <- read.csv("ProbeTest4_Pipeline.Summary.Details.csv")
+ProbeTest3_pipeSummary <- read.csv("ProbeTest3_Pipeline.Summary.Details.csv")
 
+# Merge the 3 documents
+All_pipeSummary <- merge(ProbeTest5_pipeSummary, ProbeTest4_pipeSummary, all = T)
+All_pipeSummary <- merge(All_pipeSummary, ProbeTest3_pipeSummary, all = T)
 
+All_pipeSummary$X <- NULL
+All_pipeSummary$X.1 <- NULL
 
+All_pipeSummary$Hyb_Time <- as.character(All_pipeSummary$Hyb_Time)
+ordered_Hyb_Time <- c("4", "16")
+All_pipeSummary$Hyb_Time <- factor(All_pipeSummary$Hyb_Time, levels = ordered_Hyb_Time)
 
+All_pipeSummary$Week <- as.character(All_pipeSummary$Week)
+ordered_Week <- c("0", "2", "4")
+All_pipeSummary$Week <- factor(All_pipeSummary$Week, levels = ordered_Week)
+
+All_pipeSummary$EukrRNADep <- as.character(All_pipeSummary$EukrRNADep)
+ordered_EukrRNADep <- c("MtbrRNA", "DualrRNA")
+All_pipeSummary$EukrRNADep <- factor(All_pipeSummary$EukrRNADep, levels = ordered_EukrRNADep)
+
+# Remove the undetermined
+All_pipeSummary <- All_pipeSummary %>% filter(SampleID != "Undetermined_S0")
+
+# Remove the marmoset and the high low THP1 samples
+All_pipeSummary <- All_pipeSummary %>% filter(!Sample_Type %in% c("Marmoset", "High_Low_THP1"))
+
+All_pipeSummary$SampleID <- gsub(x = All_pipeSummary$SampleID, pattern = "_S.*", replacement = "") # This regular expression removes the _S and everything after it (I think...)
+
+All_pipeSummary <- All_pipeSummary %>% mutate(Sputum_Number = str_extract(SampleID, "S_[0-9]+"))
+
+# Just get the samples I am interested in
+my_pipeSummary <- All_pipeSummary %>% filter(SampleID %in% (my_sample_names))
+rownames(my_pipeSummary) <- my_pipeSummary$SampleID
+
+# Change the NA to broth
+my_pipeSummary$Week <- as.character(my_pipeSummary$Week)
+my_pipeSummary$Week[is.na(my_pipeSummary$Week)] <- "Broth"
+my_pipeSummary$Week <- as.factor(my_pipeSummary$Week)  # Convert back if needed
+
+my_pipeSummary["Week"]
 
 
 
