@@ -38,11 +38,14 @@ ui <- fluidPage(
            selectInput("my_GeneSet",
                        label = "Gene Set",
                        choices = NULL),
+           selectInput("my_scaling",
+                       label = "How to scale",
+                       choices = (c("row", "column", "none"))),
            # Add checkbox to toggle gene set points
            checkboxInput("show_gene_types", label = "Show gene types", value = FALSE),
     ),
     
-    column(width = 5,
+    column(width = 7, # Max is 12...
            uiOutput("dynamic_pheatmap")
            # plotOutput("pheatmap", width = "200%", height = "600")
            # plotOutput("pheatmap", width = "100%", height = "600px")
@@ -71,6 +74,7 @@ server <- function(input, output, session) {
     
     # Dynamically set plot height (base height + extra space per gene)
     plot_height <- max(400, min(2500, num_genes * 40))  # Adjust as needed
+    # plot_width <- max(2000, min(2000)) # Still need to figure out how to change this! 
     
     plotOutput("pheatmap", height = paste0(plot_height, "px"))
   })
@@ -93,7 +97,7 @@ server <- function(input, output, session) {
                   annotation_col = my_pipeSummary["Week"], 
                   annotation_row = annotation_row_data,  # Conditional annotation
                   annotation_colors = my_annotation_colors,
-                  scale = "row", 
+                  scale = input$my_scaling, 
                   fontsize = 18)
     p
     
@@ -105,4 +109,4 @@ server <- function(input, output, session) {
 }
 
 # Run the app ----
-shinyApp(ui = ui, server = server, options = list(launch.browser = TRUE))
+shinyApp(ui = ui, server = server)# , options = list(launch.browser = TRUE))
