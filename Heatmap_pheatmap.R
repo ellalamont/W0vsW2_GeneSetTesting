@@ -76,11 +76,10 @@ pheatmap(testing,
 
 
 allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["microaerophilic: top 25 genes"]]
-my_data <- my_tpm[rownames(my_tpm) %in% allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["microaerophilic: top 25 genes"]], ]
-testing <- my_tpm %>% subset(rownames(my_tpm) %in% allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["microaerophilic: top 25 genes"]])
-identical(my_data, testing) # TRUE
+my_data <- my_tpm %>% subset(rownames(my_tpm) %in% allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["human_sputum: top 25 genes"]])
 p <- pheatmap(my_data, 
               annotation_col = my_pipeSummary["Week"], 
               annotation_colors = my_annotation_colors,
               scale = "row")
+p
 heatmap(as.matrix(my_data))
