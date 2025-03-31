@@ -20,7 +20,11 @@ my_plot_themes <- theme_bw() +
         plot.subtitle = element_text(size=12), 
         plot.margin = margin(10, 10, 10, 20))
 
-
+my_annotation_colors <- list(
+  Week = c("0" = "#0072B2",  # Blue
+           "2" = "#E66900",  # Orange
+           "Broth" = "#999999")  # Grey
+)
 
 # Define UI ----
 ui <- fluidPage(
