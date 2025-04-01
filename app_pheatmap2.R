@@ -46,13 +46,15 @@ ui <- fluidPage(
            # Select genes manually
            textInput("manual_genes",
                      label = "Enter Rv# (comma separated)",
-                     placeholder = "Rv0081, Rv2011c, Rv0494"),
+                     placeholder = "Rv1473A, Rv2011c, Rv0494"),
            
            selectInput("my_scaling",
                        label = "How to scale",
                        choices = (c("row", "column", "none"))),
            # Add checkbox to toggle gene set points
            checkboxInput("show_gene_types", label = "Show gene types", value = FALSE),
+           # Add checkbox to toggle display_numbers in heatmap
+           checkboxInput("show_numbers", label = "Show Values", value = FALSE),
     ),
     
     column(width = 7, # Max is 12...
@@ -133,7 +135,11 @@ server <- function(input, output, session) {
                   annotation_col = my_pipeSummary["Week"], 
                   annotation_row = annotation_row_data,  # Conditional annotation
                   annotation_colors = my_annotation_colors,
+                  # col = colorRampPalette(c("navy", "white", "firebrick3"))(50),
                   scale = input$my_scaling, 
+                  display_numbers = input$show_numbers,
+                  fontsize_number = 7,
+                  # cluster_rows = FALSE,
                   fontsize = 18)
     p
     

@@ -105,7 +105,7 @@ for (i in 1:length(list_dfs)) {
 # names(allGeneSets) <- gsub("<.*", "", names(allGeneSets))
 # `Glycolysis / Gluconeogenesis ` <- allGeneSets$`Glycolysis / Gluconeogenesis ` # Pull this one out and will add it to the functional groups one
 # 
-# load("MTb.Tuberculist.FunctionalGroups.rda")
+load("GeneSet_Data/Walter2015GeneSets.rda")
 # # Add the glycolsis list
 # allGeneSets <- append(allGeneSets, list(`Glycolysis / Gluconeogenesis ` = `Glycolysis / Gluconeogenesis `))
 
