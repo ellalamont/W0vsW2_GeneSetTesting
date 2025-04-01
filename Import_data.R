@@ -138,6 +138,14 @@ for(file in rda_files) {
   rm(env)
 }
 
+# Now update the names for each gene set in the list of lists:
+allGeneSetList <- lapply(allGeneSetList, function(gset) {
+  if (!is.null(gset)) {
+    names(gset) <- gsub("<.*", "", names(gset))
+  }
+  return(gset)
+})
+
 ###########################################################
 ############### IMPORT H37Rv GENE ANNOTATION ##############
 
