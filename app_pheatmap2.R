@@ -116,10 +116,6 @@ server <- function(input, output, session) {
     
     selected_genes <- get_selected_genes()
     
-    # Subset the dataframe using genes in the selected gene set
-    # my_tpm has genes as rownames and samples as columns
-    # my_data <- my_tpm %>% subset(rownames(my_tpm) %in% allGeneSetList[[input$my_GeneSetSource]][[input$my_GeneSet]])
-    
     # Filter data based on selected genes
     my_data <- my_tpm[rownames(my_tpm) %in% selected_genes, , drop = FALSE]
     
