@@ -10,6 +10,12 @@
 
 # Start with my_tpm_W0vsBroth, also my_tpm which has all the unique sputum >1M and the broth
 
+my_annotation_colors <- list(
+  Week = c("0" = "#0072B2",  # Blue
+           "2" = "#E66900",  # Orange
+           "Broth" = "#999999")  # Grey
+)
+
 ###########################################################
 ###################### PROCESS DATA #######################
 
@@ -83,3 +89,16 @@ p <- pheatmap(my_data,
               scale = "row")
 p
 heatmap(as.matrix(my_data))
+
+
+selected_genes <- c("Rv0081", "Rv0494", "Rv2011c", "Rv1473A")
+my_data <- my_tpm[rownames(my_tpm) %in% selected_genes, , drop = FALSE]
+p <- pheatmap(my_data, 
+              annotation_col = my_pipeSummary["Week"], 
+              # annotation_row = annotation_row_data,  # Conditional annotation
+              annotation_colors = my_annotation_colors,
+              scale = "row", 
+              fontsize = 18)
+p
+
+

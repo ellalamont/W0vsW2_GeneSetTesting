@@ -75,16 +75,28 @@ server <- function(input, output, session) {
                       selected = NULL)
   })
   
+  # Function to get the selected genes
+  get_selected_genes <- reactive({
+    if (input$manual_genes != "") {
+      # Process manual input: remove extra spaces, split by commas or spaces
+      genes <- unlist(strsplit(input$manual_genes, "[,\\s]+"))
+      genes <- trimws(genes)  # Trim whitespace
+      genes <- genes[genes != ""]  # Remove empty entries
+    } else if (!is.null(input$my_GeneSet) && input$my_GeneSet %in% names(allGeneSetList[[input$my_GeneSetSource]])) {
+      genes <- allGeneSetList[[input$my_GeneSetSource]][[input$my_GeneSet]]
+    } else {
+      genes <- character(0)  # Empty vector if nothing is selected
+    }
+    
+    return(genes)
+  })
+  
   # Dynamic UI for heatmap height
   output$dynamic_pheatmap <- renderUI({
     # req(input$my_GeneSetSource, input$my_GeneSet)
     
     # Get the list of genes from either dropdown selection or manual input
-    selected_genes <- if (input$manual_genes != "") {
-      strsplit(input$manual_genes, "[,\\s]+")[[1]]  # Split by commas or spaces
-    } else {
-      allGeneSetList[[input$my_GeneSetSource]][[input$my_GeneSet]]
-    }
+    selected_genes <- get_selected_genes()
     
     # Count the number of genes in the selected set
     num_genes <- sum(rownames(my_tpm) %in% allGeneSetList[[input$my_GeneSetSource]][[input$my_GeneSet]])
@@ -102,12 +114,7 @@ server <- function(input, output, session) {
     # Ensure both inputs are available
     # req(input$my_GeneSetSource, input$my_GeneSet)
     
-    # Get the list of genes
-    selected_genes <- if (input$manual_genes != "") {
-      strsplit(input$manual_genes, "[,\\s]+")[[1]]
-    } else {
-      allGeneSetList[[input$my_GeneSetSource]][[input$my_GeneSet]]
-    }
+    selected_genes <- get_selected_genes()
     
     # Subset the dataframe using genes in the selected gene set
     # my_tpm has genes as rownames and samples as columns
@@ -116,8 +123,11 @@ server <- function(input, output, session) {
     # Filter data based on selected genes
     my_data <- my_tpm[rownames(my_tpm) %in% selected_genes, , drop = FALSE]
     
-    # Ensure we have data to plot
-    req(nrow(my_data) > 0)
+    # Check if we have at least 2 genes
+    if (nrow(my_data) < 2) {
+      showNotification("At least two valid genes are required for clustering.", type = "error")
+      return(NULL)
+    }
     
     # Determine annotation_row based on checkbox input
     annotation_row_data <- if(input$show_gene_types) gene_annot["Product"] else NULL
