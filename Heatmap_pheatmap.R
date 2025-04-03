@@ -64,14 +64,18 @@ pheatmap(testing, scale = "row")
 
 testing <- my_tpm %>% subset(rownames(my_tpm) %in% MTb.TB.Phenotypes.TopGeneSets$`human_sputum: top 50 genes`) # Guess this doesn't need to be a matrix
 
-my_annotation_colors <- list(
-  Week = c("0" = "#0072B2",  # Blue
-           "2" = "#E66900",  # Orange
-           "Broth" = "#999999")  # Grey
-)
 
 pheatmap(testing, 
          annotation_col = my_pipeSummary["Week"], 
+         # annotation_row = gene_annot["Product"],
+         annotation_colors = my_annotation_colors,
+         scale = "row")
+
+###########################################################
+######################## ALL DATA #########################
+
+pheatmap(my_tpm , 
+         # annotation_col = my_pipeSummary["Week"], 
          # annotation_row = gene_annot["Product"],
          annotation_colors = my_annotation_colors,
          scale = "row")

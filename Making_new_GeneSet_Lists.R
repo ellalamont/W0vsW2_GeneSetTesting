@@ -51,3 +51,23 @@ save(allGeneSets, file = "GeneSet_Data/Walter2015GeneSets.rda")
 # ADDING TO GENE SET LIST OF LISTS 
 # Want to add it to the allGeneSetList
 allGeneSetList[["Walter2015GeneSets"]] <- Walter2015GeneSets
+
+
+###########################################################
+########################## ELLA ###########################
+# Pulling from Honeyborne2016 and Cole1998
+
+# Needs to be called allGeneSets so it is easier to load with all the others
+allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "Rv1915", "Rv1916", "Rv1837c", "Rv3323c", "Rv1131", "Rv1129c"))
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/EllaGeneSets.rda")
+
+
+
+
+
+
+
+
+
