@@ -53,6 +53,7 @@ my_min <- round(min(corr), 1)
 # Plot pearson
 ggcorrplot_PearsonLog10 <- corr %>% 
   ggcorrplot(hc.order = F, 
+             method = "square", 
              lab = TRUE, lab_size = 4,
              type = c("lower"),
              outline.col = "white") + 
@@ -64,10 +65,10 @@ ggcorrplot_PearsonLog10 <- corr %>%
        fill = "Correlation")
 ggcorrplot_PearsonLog10
 
-ggsave(ggcorrplot_PearsonLog10,
-       file = "ggcorrplot_PearsonLog10_v2.pdf",
-       path = "ggcorrplot_Figures",
-       width = 7, height = 6, units = "in")
+# ggsave(ggcorrplot_PearsonLog10,
+#        file = "ggcorrplot_PearsonLog10_v2.pdf",
+#        path = "ggcorrplot_Figures",
+#        width = 7, height = 6, units = "in")
 
 
 ###########################################################
@@ -98,10 +99,10 @@ ggcorrplot_SpearmanLog10 <- corr %>%
        fill = "Correlation")
 ggcorrplot_SpearmanLog10
 
-ggsave(ggcorrplot_SpearmanLog10,
-       file = "ggcorrplot_SpearmanLog10_v2.pdf",
-       path = "ggcorrplot_Figures",
-       width = 7, height = 6, units = "in")
+# ggsave(ggcorrplot_SpearmanLog10,
+#        file = "ggcorrplot_SpearmanLog10_v2.pdf",
+#        path = "ggcorrplot_Figures",
+#        width = 7, height = 6, units = "in")
 
 
 ###########################################################
@@ -114,15 +115,15 @@ install.packages("Rarity")
 library(Rarity)
 
 # Pearson
-pdf("ggcorrplot_Figures/rarity_PearsonLog10_v1.pdf", width = 10, height = 10)
-corPlot(my_tpm_Log10, method = "pearson", 
-        title = "Pearson Correlation Log10(TPM+1)") 
-dev.off()
+# pdf("ggcorrplot_Figures/rarity_PearsonLog10_v1.pdf", width = 10, height = 10)
+# corPlot(my_tpm_Log10, method = "pearson", 
+#         title = "Pearson Correlation Log10(TPM+1)") 
+# dev.off()
 
 # Spearman
-pdf("ggcorrplot_Figures/rarity_SpearmanLog10_v1.pdf", width = 10, height = 10)
-corPlot(my_tpm_Log10, method = "spearman", 
-        title = "Spearman Correlation Log10(TPM+1)") 
-dev.off()
+# pdf("ggcorrplot_Figures/rarity_SpearmanLog10_v1.pdf", width = 10, height = 10)
+# corPlot(my_tpm_Log10, method = "spearman", 
+#         title = "Spearman Correlation Log10(TPM+1)") 
+# dev.off()
 
 
