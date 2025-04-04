@@ -58,7 +58,10 @@ allGeneSetList[["Walter2015GeneSets"]] <- Walter2015GeneSets
 # Pulling from Honeyborne2016 and Cole1998
 
 # Needs to be called allGeneSets so it is easier to load with all the others
-allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "Rv1915", "Rv1916", "Rv1837c", "Rv3323c", "Rv1131", "Rv1129c"))
+allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "Rv1915", "Rv1916", "Rv1837c", "Rv3323c", "Rv1131", "Rv1129c"),
+                    "ATP synthase" = c("Rv1308", "Rv1304", "Rv1311", "Rv1310", "Rv1305", "Rv1306", "Rv1309", "Rv1307"),
+                    "Electron transport" = c("Rv0409", "Rv1623c", "Rv1622c", "Rv1620c", "Rv1621c", "Rv2007c", "Rv3554", "Rv1177", "Rv3503c", "Rv3029c", "Rv3028c", "Rv3106", "Rv0886", "Rv3251c", "Rv3250c"),
+                    "TCA cycle" = c("Rv1475c", "Rv0889c", "Rv2498c", "Rv1098c", "Rv1131", "Rv0896", "Rv3339c", "Rv0066c", "Rv0794c", "Rv1240", "Rv2967c", "Rv3318", "Rv3319", "Rv3316", "Rv3317", "Rv1248c", "Rv2215", "Rv0951", "Rv0952"))
 
 # SAVE AS RDA FOR LATER 
 save(allGeneSets, file = "GeneSet_Data/EllaGeneSets.rda")
