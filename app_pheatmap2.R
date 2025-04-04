@@ -47,7 +47,14 @@ ui <- fluidPage(
            textInput("manual_genes",
                      label = "Enter Rv# (comma separated)",
                      placeholder = "Rv1473A, Rv2011c, Rv0494"),
-           
+           # Add row clustering options
+           numericInput("cutree_rows", 
+                        label = "Number of Row Clusters", 
+                        value = 1, min = 1, step = 1),
+           # Add column clustering options
+           numericInput("cutree_cols", 
+                        label = "Number of Column Clusters", 
+                        value = 1, min = 1, step = 1),
            selectInput("my_scaling",
                        label = "How to scale",
                        choices = (c("row", "column", "none"))),
@@ -139,7 +146,8 @@ server <- function(input, output, session) {
                   scale = input$my_scaling, 
                   display_numbers = input$show_numbers,
                   fontsize_number = 7,
-                  # cluster_rows = FALSE,
+                  cutree_rows = input$cutree_rows,
+                  cutree_cols = input$cutree_cols,
                   fontsize = 18)
     p
     
