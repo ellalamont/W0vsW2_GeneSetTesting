@@ -32,7 +32,7 @@ ui <- fluidPage(
   
   fluidRow(
     
-    column(width = 2.5,
+    column(width = 4,
 
            # Dropdown for selecting which rda file (gene set source)
            selectInput("my_GeneSetSource",
@@ -64,7 +64,7 @@ ui <- fluidPage(
            checkboxInput("show_numbers", label = "Show Values", value = FALSE),
     ),
     
-    column(width = 7, # Max is 12...
+    column(width = 8, # Max is 12...
            uiOutput("dynamic_pheatmap")
            # plotOutput("pheatmap", width = "200%", height = "600")
            # plotOutput("pheatmap", width = "100%", height = "600px")
