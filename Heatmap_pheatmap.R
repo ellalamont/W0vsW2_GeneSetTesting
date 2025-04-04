@@ -80,6 +80,104 @@ pheatmap(my_tpm ,
          annotation_colors = my_annotation_colors,
          scale = "row")
 
+my_tpm_2 <- my_tpm[rowSums(my_tpm == 0) != ncol(my_tpm), ]
+
+my_tpm_2_matrix <- my_tpm_2 %>% 
+  # rename("W0_250754" = "S_250754",
+  #        "W0_355466" = "S_355466",
+  #        "W0_503557" = "S_503557",
+  #        "W2_503937" = "S_503937",
+  #        "W2_575533" = "S_575533_MtbrRNA",
+  #        "W2_577208" = "S_577208") %>%
+  as.matrix()
+
+testing2 <- testing %>% 
+  as.matrix()
+
+
+pheatmap(testing2, 
+         annotation_col = my_pipeSummary["Week"], 
+         scale = "row",
+         cutree_rows = 5,
+         cutree_cols = 5)
+
+
+###########################################################
+############### ALL DATA WITH CLUSTERING ##################
+# https://davetang.org/muse/2018/05/15/making-a-heatmap-in-r-with-the-pheatmap-package/
+
+pheatmap(my_tpm_2_matrix, 
+         # annotation_row = my_gene_col, 
+         annotation_col = my_pipeSummary["Week"],
+         scale = "row",
+         cutree_rows = 5,
+         cutree_cols = 5)
+
+# Try to get good row annotations based on MTb functional group
+# Start with MTb.TB.Phenotypes.AllGeneSets
+# Convert to dataframe
+Gene_Category <- do.call(rbind, lapply(names(Walter2015GeneSets), function(category) {
+  data.frame(Gene = Walter2015GeneSets[[category]], Category = category, stringsAsFactors = FALSE)
+})) %>% 
+  filter(!Category %in% c("Cluster A", "Cluster B", "Cluster D", "Cluster E")) %>% 
+  distinct(Gene, .keep_all = TRUE) %>% # Keep only the first gene occurance
+  column_to_rownames(var = "Gene")
+
+
+pheatmap(my_tpm_2_matrix, 
+         # annotation_row = Gene_Category, 
+         fontsize_row = 1,
+         annotation_col = my_pipeSummary["Week"],
+         annotation_colors = my_annotation_colors,
+         scale = "row",
+         cutree_rows = 8,
+         cutree_cols = 5)
+
+
+
+
+
+# Pull out what the clusters are: 
+# use silent = TRUE to suppress the plot
+my_heatmap <- pheatmap(my_tpm_2_matrix, 
+                       annotation_row = Gene_Category, 
+                       annotation_col = my_pipeSummary["Week"],
+                       annotation_colors = my_annotation_colors,
+                       scale = "row",
+                       cutree_rows = 7,
+                       cutree_cols = 5,
+                       silent = TRUE)
+# Extract the row clustering information
+row_clusters <- cutree(my_heatmap$tree_row, k = 7)
+# Convert to a data frame for easier handling
+row_cluster_df <- data.frame(Gene = names(row_clusters), Cluster = row_clusters)
+# View the first few rows
+head(row_cluster_df)
+
+
+###########################################################
+############ W0 AND BROTH WITH CLUSTERING #################
+
+my_tpm_3_matrix <- my_tpm_2 %>% select(-c("S_503937", "S_577208", "S_575533_MtbrRNA")) %>%
+  as.matrix()
+
+Gene_Category <- do.call(rbind, lapply(names(MTb.TB.Phenotypes.AllGeneSets), function(category) {
+  data.frame(Gene = MTb.TB.Phenotypes.AllGeneSets[[category]], Category = category, stringsAsFactors = FALSE)
+})) %>% 
+  # filter(!Category %in% c("Cluster A", "Cluster B", "Cluster D", "Cluster E")) %>% 
+  distinct(Gene, .keep_all = TRUE) %>% # Keep only the first gene occurance
+  column_to_rownames(var = "Gene")
+
+pheatmap(my_tpm_3_matrix, 
+         annotation_row = Gene_Category, 
+         fontsize_row = 1,
+         annotation_col = my_pipeSummary["Week"],
+         annotation_colors = my_annotation_colors,
+         scale = "row",
+         cutree_rows = 6,
+         cutree_cols = 2)
+
+
 
 ###########################################################
 ################### TESTING FOR SHINY #####################
@@ -97,12 +195,12 @@ heatmap(as.matrix(my_data))
 
 selected_genes <- c("Rv0081", "Rv0494", "Rv2011c", "Rv1473A")
 my_data <- my_tpm[rownames(my_tpm) %in% selected_genes, , drop = FALSE]
-p <- pheatmap(my_data, 
+pheatmap(my_data, 
               annotation_col = my_pipeSummary["Week"], 
-              # annotation_row = annotation_row_data,  # Conditional annotation
+              annotation_row = gene_annot["Product"],  # Conditional annotation
               annotation_colors = my_annotation_colors,
               scale = "row", 
               fontsize = 18)
-p
+
 
 
