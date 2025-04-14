@@ -60,6 +60,10 @@ ui <- fluidPage(
                        choices = (c("row", "column", "none"))),
            # Add checkbox to toggle display_numbers in heatmap
            checkboxInput("show_numbers", label = "Show Values", value = FALSE),
+           textInput("my_GeneID", 
+                     label = "Pick a gene to link to mycobrowser",
+                     placeholder = "Rv..."),
+           uiOutput("gene_link")  # New UI output for the link
     ),
     
     column(width = 8, # Max is 12...
@@ -74,6 +78,13 @@ ui <- fluidPage(
 
 # Define server logic ----
 server <- function(input, output, session) {
+  
+  # Gene Link
+  output$gene_link <- renderUI({
+    req(input$my_GeneID)  # Ensure there's a valid input
+    url <- paste0("https://mycobrowser.epfl.ch/genes/", input$my_GeneID)
+    tags$a(href = url, target = "_blank", paste0("View Details of ", input$my_GeneID, " on Mycobrowser"))
+  })
   
   # When a new gene set source is selected, update the gene set dropdown
   observeEvent(input$my_GeneSetSource, {
