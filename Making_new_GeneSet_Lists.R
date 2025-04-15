@@ -65,7 +65,8 @@ allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "R
                     "Electron transport" = c("Rv0409", "Rv1623c", "Rv1622c", "Rv1620c", "Rv1621c", "Rv2007c", "Rv3554", "Rv1177", "Rv3503c", "Rv3029c", "Rv3028c", "Rv3106", "Rv0886", "Rv3251c", "Rv3250c"),
                     "TCA cycle" = c("Rv1475c", "Rv0889c", "Rv2498c", "Rv1098c", "Rv1131", "Rv0896", "Rv3339c", "Rv0066c", "Rv0794c", "Rv1240", "Rv2967c", "Rv3318", "Rv3319", "Rv3316", "Rv3317", "Rv1248c", "Rv2215", "Rv0951", "Rv0952"),
                     "Lipid biosynthesis" = c("Rv3285", "Rv0904c", "Rv3799c", "Rv3280", "Rv2247", "Rv2244", "Rv2523c", "Rv2243", "Rv0639", "Rv1483", "Rv1350", "Rv2002", "Rv0242c", "Rv2524c", "Rv1484", "Rv2245", "Rv2246", "Rv1618", "Rv2605c", "Rv0033", "Rv1344", "Rv1722", "Rv3221c", "Rv3472"),
-                    "Zinc related" = c("Rv0198c", "Rv2359", "Rv2782c", "Rv3610c", "Rv0162c", "Rv0761c", "Rv3086"))
+                    "Zinc related" = c("Rv0198c", "Rv2359", "Rv2782c", "Rv3610c", "Rv0162c", "Rv0761c", "Rv3086"),
+                    "Ribosomal proteins" = c("Rv3100c", "Rv3420c", "Rv0995", "Rv0641", "Rv0704", "Rv0701", "Rv0702", "Rv0716", "Rv0719", "Rv0056", "Rv0651", "Rv0640", "Rv0652", "Rv3443c", "Rv0714", "Rv0723", "Rv0708", "Rv3456c", "Rv0720", "Rv2904c", "Rv1643", "Rv2442c", "Rv0706", "Rv0703", "Rv0715", "Rv1015c", "Rv2441c", "Rv0105c", "Rv2058c", "Rv0709", "Rv0722", "Rv1298", "Rv2057c", "Rv3924c", "Rv1642", "Rv3461c", "Rv1630", "Rv2890c", "Rv0707", "Rv3458c", "Rv0721", "Rv0053", "Rv0683", "Rv0718", "Rv3442c", "Rv0700", "Rv3459c", "Rv0682", "Rv3460c", "Rv0717", "Rv2056c", "Rv2785c", "Rv2909c", "Rv0710", "Rv0055", "Rv2055c", "Rv0705", "Rv2412", "Rv3241c"))
 
 # SAVE AS RDA FOR LATER 
 save(allGeneSets, file = "GeneSet_Data/EllaGeneSets.rda")
