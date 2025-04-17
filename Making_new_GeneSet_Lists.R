@@ -50,7 +50,45 @@ save(allGeneSets, file = "GeneSet_Data/Walter2015GeneSets.rda")
 
 # ADDING TO GENE SET LIST OF LISTS 
 # Want to add it to the allGeneSetList
-allGeneSetList[["Walter2015GeneSets"]] <- Walter2015GeneSets
+# allGeneSetList[["Walter2015GeneSets"]] <- Walter2015GeneSets
+
+
+###########################################################
+####################### RACHMAN 2006 ######################
+# This is lung dissections not sputum so not sure how relevant, but did see one notable difference with here I want to keep track of
+# https://pmc.ncbi.nlm.nih.gov/articles/PMC1360294/#r7
+
+allGeneSets <- list("Fatty acid modification" = c("Rv3229c", "Rv0824c", "Rv0642c", "Rv0503c", "Rv0644c", "Rv0645c", "Rv3391", "Rv3538", "Rv0447c", "Rv0643c", "Rv0469", "Rv3392c", "Rv1094", "Rv0470c"))
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/Rachman2006GeneSets.rda")
+
+
+###########################################################
+######################## SHARMA 2017 ######################
+# https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0173508#pone.0173508.s004
+
+allGeneSets <- list("30S ribosomal proteins" = c("Rv0683", "Rv3442c", "Rv0700", "Rv0682", "Rv0705", "Rv0710", "Rv3459"),
+                    "50S ribosomals proteins" = c("Rv2441c", "Rv0722", "Rv1298", "Rv3924c", "Rv3461c", "Rv0641","Rv0704", "Rv0701", "Rv0702", "Rv0716", "Rv0719", "Rv0056", "Rv0640", "Rv0723", "Rv0708", "Rv3456c"),
+                    "ATP synthase" = c("Rv1308", "Rv1304", "Rv1310", "Rv1305", "Rv1306", "Rv1309", "Rv1307"),
+                    "Respiratory inactive state" = c("Rv3151", "Rv3152", "Rv3157", "Rv3158", "Rv3155", "Rv2195", "Rv2196", "Rv2193", "Rv1162"),
+                    "PDIM/PGL cell wall synthesis/transport" = c("Rv2930", "Rv2935", "Rv2936", "Rv2937", "Rv2941", "Rv2942", "Rv2948", "Rv2950c", "Rv2959c"),
+                    "ESX loci" = c("Rv3871", "Rv3872", "Rv3875", "Rv3874", "Rv3878", "Rv0282", "Rv2084", "Rv0286", "Rv0288", "Rv0292", "Rv1783", "Rv1792", "Rv1793", "Rv1795"))
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/Sharma2017GeneSets.rda")
+
+###########################################################
+######################## COLE1998 #########################
+
+allGeneSets <- list("Ribosomal proteins" = c("Rv3100c", "Rv3420c", "Rv0995", "Rv0641", "Rv0704", "Rv0701", "Rv0702", "Rv0716", "Rv0719", "Rv0056", "Rv0651", "Rv0640", "Rv0652", "Rv3443c", "Rv0714", "Rv0723", "Rv0708", "Rv3456c", "Rv0720", "Rv2904c", "Rv1643", "Rv2442c", "Rv0706", "Rv0703", "Rv0715", "Rv1015c", "Rv2441c", "Rv0105c", "Rv2058c", "Rv0709", "Rv0722", "Rv1298", "Rv2057c", "Rv3924c", "Rv1642", "Rv3461c", "Rv1630", "Rv2890c", "Rv0707", "Rv3458c", "Rv0721", "Rv0053", "Rv0683", "Rv0718", "Rv3442c", "Rv0700", "Rv3459c", "Rv0682", "Rv3460c", "Rv0717", "Rv2056c", "Rv2785c", "Rv2909c", "Rv0710", "Rv0055", "Rv2055c", "Rv0705", "Rv2412", "Rv3241c"),
+                    "Electron transport" = c("Rv0409", "Rv1623c", "Rv1622c", "Rv1620c", "Rv1621c", "Rv2007c", "Rv3554", "Rv1177", "Rv3503c", "Rv3029c", "Rv3028c", "Rv3106", "Rv0886", "Rv3251c", "Rv3250c"),
+                    "Lipid biosynthesis" = c("Rv3285", "Rv0904c", "Rv3799c", "Rv3280", "Rv2247", "Rv2244", "Rv2523c", "Rv2243", "Rv0639", "Rv1483", "Rv1350", "Rv2002", "Rv0242c", "Rv2524c", "Rv1484", "Rv2245", "Rv2246", "Rv1618", "Rv2605c", "Rv0033", "Rv1344", "Rv1722", "Rv3221c", "Rv3472"),
+                    "Gluconeogenesis" = c("Rv0211", "Rv0069c")
+                    )
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/Cole1998GeneSets.rda")
 
 
 ###########################################################
@@ -62,11 +100,9 @@ allGeneSetList[["Walter2015GeneSets"]] <- Walter2015GeneSets
 # Needs to be called allGeneSets so it is easier to load with all the others
 allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "Rv1915", "Rv1916", "Rv1837c", "Rv3323c", "Rv1131", "Rv1129c", "Rv1130"),
                     "ATP synthase" = c("Rv1308", "Rv1304", "Rv1311", "Rv1310", "Rv1305", "Rv1306", "Rv1309", "Rv1307"),
-                    "Electron transport" = c("Rv0409", "Rv1623c", "Rv1622c", "Rv1620c", "Rv1621c", "Rv2007c", "Rv3554", "Rv1177", "Rv3503c", "Rv3029c", "Rv3028c", "Rv3106", "Rv0886", "Rv3251c", "Rv3250c"),
                     "TCA cycle" = c("Rv1475c", "Rv0889c", "Rv2498c", "Rv1098c", "Rv1131", "Rv0896", "Rv3339c", "Rv0066c", "Rv0794c", "Rv1240", "Rv2967c", "Rv3318", "Rv3319", "Rv3316", "Rv3317", "Rv1248c", "Rv2215", "Rv0951", "Rv0952"),
-                    "Lipid biosynthesis" = c("Rv3285", "Rv0904c", "Rv3799c", "Rv3280", "Rv2247", "Rv2244", "Rv2523c", "Rv2243", "Rv0639", "Rv1483", "Rv1350", "Rv2002", "Rv0242c", "Rv2524c", "Rv1484", "Rv2245", "Rv2246", "Rv1618", "Rv2605c", "Rv0033", "Rv1344", "Rv1722", "Rv3221c", "Rv3472"),
-                    "Zinc related" = c("Rv0198c", "Rv2359", "Rv2782c", "Rv3610c", "Rv0162c", "Rv0761c", "Rv3086"),
-                    "Ribosomal proteins" = c("Rv3100c", "Rv3420c", "Rv0995", "Rv0641", "Rv0704", "Rv0701", "Rv0702", "Rv0716", "Rv0719", "Rv0056", "Rv0651", "Rv0640", "Rv0652", "Rv3443c", "Rv0714", "Rv0723", "Rv0708", "Rv3456c", "Rv0720", "Rv2904c", "Rv1643", "Rv2442c", "Rv0706", "Rv0703", "Rv0715", "Rv1015c", "Rv2441c", "Rv0105c", "Rv2058c", "Rv0709", "Rv0722", "Rv1298", "Rv2057c", "Rv3924c", "Rv1642", "Rv3461c", "Rv1630", "Rv2890c", "Rv0707", "Rv3458c", "Rv0721", "Rv0053", "Rv0683", "Rv0718", "Rv3442c", "Rv0700", "Rv3459c", "Rv0682", "Rv3460c", "Rv0717", "Rv2056c", "Rv2785c", "Rv2909c", "Rv0710", "Rv0055", "Rv2055c", "Rv0705", "Rv2412", "Rv3241c"))
+                    "Zinc related" = c("Rv0198c", "Rv2359", "Rv2782c", "Rv3610c", "Rv0162c", "Rv0761c", "Rv3086")
+                    )
 
 # SAVE AS RDA FOR LATER 
 save(allGeneSets, file = "GeneSet_Data/EllaGeneSets.rda")
