@@ -71,6 +71,26 @@ pheatmap(testing,
          annotation_colors = my_annotation_colors,
          scale = "row")
 
+
+###########################################################
+################# PHEATMAP FOR LANCE ######################
+# 4/18/25: Lance want to check some of his genes of interest in my week 0 sputum samples
+
+Lance_genes <- c("Rv3823c", "Rv1183", "Rv0206c", "Rv1886c", "Rv2942")
+Lance_genes_2 <- c("Rv3820c", "Rv3821", "Rv3822", "Rv3823c", "Rv3824c", "Rv3825c", "Rv0295c", "Rv1182", "Rv3826")
+
+Lance_subset <- my_tpm_W0vsBroth %>% subset(rownames(my_tpm_W0) %in% Lance_genes_2)
+
+pheatmap(Lance_subset, 
+         # annotation_row = Gene_Category, 
+         annotation_col = my_pipeSummary["Week"],
+         # annotation_colors = my_annotation_colors,
+         scale = "row",
+         display_numbers = T)
+
+# write.csv(Lance_subset, "Lance_subset_2.csv")
+
+
 ###########################################################
 ######################## ALL DATA #########################
 
@@ -176,6 +196,14 @@ pheatmap(my_tpm_3_matrix,
          scale = "row",
          cutree_rows = 6,
          cutree_cols = 2)
+
+
+
+
+
+
+
+
 
 
 

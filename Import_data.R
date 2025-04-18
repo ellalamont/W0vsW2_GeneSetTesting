@@ -197,11 +197,12 @@ rownames(All_tpm) <- All_tpm[,1] # add the rownames
 
 my_sample_names <- c("S_250754", "S_355466", "S_503557", "S_503937", "S_575533_MtbrRNA", "S_577208", "H37Ra_Broth_4", "H37Ra_Broth_5", "H37Ra_Broth_6")
 W0vsBroth_sample_names <- c("S_250754", "S_355466", "S_503557", "H37Ra_Broth_4", "H37Ra_Broth_5", "H37Ra_Broth_6")
+W0_sample_names <- c("S_250754", "S_355466", "S_503557" )
 
 my_tpm <- All_tpm %>% select(all_of(my_sample_names))
 my_tpm_W0vsBroth <- All_tpm %>% select(all_of(W0vsBroth_sample_names))
 
-
+my_tpm_W0 <- All_tpm %>% select(all_of(W0_sample_names))
 
 ###########################################################
 ############### IMPORT PIPELINE SUMMARY DATA ##############
