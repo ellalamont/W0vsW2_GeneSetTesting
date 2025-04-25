@@ -35,10 +35,10 @@ allGeneSets <- list("Aerobic respiration" = c("Rv1542c", "Rv1854c", "Rv2193", "R
                            "Isoniazid stress resonse" = c("Rv1592c", "Rv1772", "Rv2244", "Rv2247", "Rv3139"),
                            "Drug activating enzymes and drug targets" = c("Rv0005", "Rv0006", "Rv1484", "Rv2043c", "Rv3854c"),
                            "Putative drug efflux pumps and transporters" = c("Rv0783c", "Rv0933", "Rv1002c", "Rv1348", "Rv1456c", "Rv1634", "Rv1747", "Rv1877", "Rv2686c", "Rv2936", "Rv2937", "Rv2938", "Rv2994", "Rv3065", "Rv3679"),
-                           "Cluster A" = c("Rv0362", "Rv0811c", "Rv1224", "Rv1268c", "Rv1717", "Rv1834", "Rv2832c", "Rv2863"),
-                           "Cluster B" = c("Rv0221", "Rv0817c", "Rv1236", "Rv1273c", "Rv1371", "Rv1745c", "Rv1814", "Rv1817", "Rv1819c", "Rv1857", "Rv2609c", "Rv3896c"),
-                           "Cluster D" = c("Rv1097c", "Rv1794", "Rv3197"),
-                           "Cluster E" = c("Rv0470c", "Rv1117", "Rv1898", "Rv1925", "Rv2401A", "Rv2455c", "Rv2459", "Rv2562", "Rv2588c", "Rv2941", "Rv3528c", "Rv3614c", "Rv3615c", "Rv3616c", "Rv3687c", "Rv3724A", "Rv3865"),
+                           # "Cluster A" = c("Rv0362", "Rv0811c", "Rv1224", "Rv1268c", "Rv1717", "Rv1834", "Rv2832c", "Rv2863"),
+                           # "Cluster B" = c("Rv0221", "Rv0817c", "Rv1236", "Rv1273c", "Rv1371", "Rv1745c", "Rv1814", "Rv1817", "Rv1819c", "Rv1857", "Rv2609c", "Rv3896c"),
+                           # "Cluster D" = c("Rv1097c", "Rv1794", "Rv3197"),
+                           # "Cluster E" = c("Rv0470c", "Rv1117", "Rv1898", "Rv1925", "Rv2401A", "Rv2455c", "Rv2459", "Rv2562", "Rv2588c", "Rv2941", "Rv3528c", "Rv3614c", "Rv3615c", "Rv3616c", "Rv3687c", "Rv3724A", "Rv3865"),
                            "Non-specific stress responses" = c("Rv0191", "Rv0375c", "Rv0674", "Rv0838", "Rv0841", "Rv1044", "Rv1101c", "Rv1424c", "Rv1714", "Rv1718", "Rv1726", "Rv1735c", "Rv1774", "Rv1811", "Rv1961", "Rv1964", "Rv1969", "Rv1995", "Rv2038c", "Rv2156c", "Rv2501c", "Rv2643", "Rv2661c", "Rv2667", "Rv2742c", "Rv2836c", "Rv3288c", "Rv3289c", "Rv3450c"),
                     "ESX Genes 2" = c("Rv3017c", "Rv3019c", "Rv3904c", "Rv3905c", "Rv3445c", "Rv3444c", "Rv3020c", "Rv3891c", "Rv1198", "Rv1792", "Rv2347c", "Rv1197c", "Rv0288", "Rv0287", "Rv3890c", "Rv1037c", "Rv3619c", "Rv1793", "Rv3875", "Rv3874", "Rv3620c", "Rv1038c", "Rv2346c")
                            )

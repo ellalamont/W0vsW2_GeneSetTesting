@@ -57,7 +57,7 @@ ggcorrplot_PearsonLog10 <- corr %>%
              lab = TRUE, lab_size = 4,
              type = c("lower"),
              outline.col = "white") + 
-  scale_fill_gradient2(limit = c(my_min,1), low = "blue", high =  "red", mid = "white", midpoint = (((1-my_min)/2)+my_min)) + # Make sure to change based on the min!
+  # scale_fill_gradient2(limit = c(my_min,1), low = "blue", high =  "red", mid = "white", midpoint = (((1-my_min)/2)+my_min)) + # Make sure to change based on the min!
   my_plot_themes + 
   scale_x_discrete(guide = guide_axis(angle = 45)) + 
   labs(title = "Pearson Correlation Log10(TPM+1)", 
@@ -66,7 +66,7 @@ ggcorrplot_PearsonLog10 <- corr %>%
 ggcorrplot_PearsonLog10
 
 # ggsave(ggcorrplot_PearsonLog10,
-#        file = "ggcorrplot_PearsonLog10_v2.pdf",
+#        file = "ggcorrplot_PearsonLog10_v3.pdf",
 #        path = "ggcorrplot_Figures",
 #        width = 7, height = 6, units = "in")
 
