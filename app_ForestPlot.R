@@ -7,10 +7,18 @@ source("Import_data.R") # list_dfs and allGeneSetList
 
 # Define UI ----
 ui <- fluidPage(
+
   titlePanel("Forest Plots"),
   
   fluidRow(
     column(width = 3,
+           
+           # Need this extra thing for printing the console messages
+           tags$style(HTML("
+           pre {
+           white-space: pre-wrap;
+           word-break: break-word;
+           margin: 0; padding: 0;}")),
            
            # Dropdown for selecting with DEG file to use
            selectInput("my_DEG_file",
@@ -27,6 +35,9 @@ ui <- fluidPage(
                         label = "Text size", 
                         value = 1.1, min = 0.5, max = 2, step = 0.1),
            
+           hr(),  # nice horizontal line
+           h6("Server Output"),
+           verbatimTextOutput("console_output")  # To show what the server prints
            ),
     
     column(width = 9, # Max is 12...
@@ -38,6 +49,9 @@ ui <- fluidPage(
 
 # Define server logic ----
 server <- function(input, output, session){
+  
+  # Store console messages
+  console_messages <- reactiveVal("")  # To store logs
   
   # To make the Forest plot change length based on number of gene sets
   # output$dynamic_forest_plot <- renderUI({
@@ -55,14 +69,25 @@ server <- function(input, output, session){
     Right_DataSet <- split_name[1]
     Left_DataSet  <- split_name[3]
     
-    plotGeneSetForest(file = list_dfs[[input$my_DEG_file]],
-                      geneSets = allGeneSetList[[input$my_GeneSetSource]],
-                      main = input$my_DEG_file,
-                      left.label = paste0(Left_DataSet, " (n=3)"), 
-                      right.label = paste0(Right_DataSet, " (n=3)"),
-                      xRange = 4, # Changes how far out the log2fold change axis goes
-                      text.cex = input$my_text_size, pt.cex = 1.25, lwd = 3.5) 
+    captured_output <- capture.output({ # Need this to capture the message printed to the console
+      plotGeneSetForest(file = list_dfs[[input$my_DEG_file]],
+                        geneSets = allGeneSetList[[input$my_GeneSetSource]],
+                        main = input$my_DEG_file,
+                        left.label = paste0(Left_DataSet, " (n=3)"), 
+                        right.label = paste0(Right_DataSet, " (n=3)"),
+                        xRange = 4, # Changes how far out the log2fold change axis goes
+                        text.cex = input$my_text_size, pt.cex = 1.25, lwd = 3.5) 
+      })
+    
+    # To save what the server prints
+    console_messages(paste(captured_output, collapse = "\n"))
   })
+  
+  # Output the messages
+  output$console_output <- renderText({
+    console_messages()
+  })
+  
 }
 
 
