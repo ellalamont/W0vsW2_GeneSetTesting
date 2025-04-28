@@ -1,6 +1,4 @@
 library(shiny)
-library(gmodels)
-library(grid)
 
 # dev.off() # Sometimes need this to get the shiny to show the pheatmap?
 
@@ -33,6 +31,12 @@ ui <- fluidPage(
   fluidRow(
     
     column(width = 4,
+           
+           # Which timepoints to plot
+           checkboxGroupInput("timepoints",
+                              label = "Select Timepoints",
+                              choices = c("Broth", "W0", "W2"),
+                              selected = c("Broth", "W0", "W2")),
 
            # Dropdown for selecting which rda file (gene set source)
            selectInput("my_GeneSetSource",
@@ -129,13 +133,30 @@ server <- function(input, output, session) {
   
   # Render the pheatmap
   output$pheatmap <- renderPlot({
-    # Ensure both inputs are available
-    # req(input$my_GeneSetSource, input$my_GeneSet)
+    
+    # Make a list of the columns for each timepoint
+    timepoint_columns <- list(
+      "W0" = c("S_250754", "S_355466", "S_503557"),
+      "W2" = c("S_503937", "S_575533_MtbrRNA", "S_577208"),
+      "Broth" = c("H37Ra_Broth_4", "H37Ra_Broth_5", "H37Ra_Broth_6"))
     
     selected_genes <- get_selected_genes()
     
     # Filter data based on selected genes
     my_data <- my_tpm[rownames(my_tpm) %in% selected_genes, , drop = FALSE]
+    
+    # Now filter columns based on which timepoints are checked
+    if (!is.null(input$timepoints)) {
+      selected_cols <- unlist(timepoint_columns[input$timepoints])
+      selected_cols <- intersect(selected_cols, colnames(my_data))  # only keep existing columns
+      my_data <- my_data[, selected_cols, drop = FALSE]
+    }
+    
+    # If no columns left, show error
+    if (ncol(my_data) == 0) {
+      showNotification("No columns match the selected timepoints.", type = "error")
+      return(NULL)
+    }
     
     # Check if we have at least 2 genes
     if (nrow(my_data) < 2) {
