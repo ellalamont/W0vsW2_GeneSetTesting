@@ -109,22 +109,42 @@ allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "R
 save(allGeneSets, file = "GeneSet_Data/EllaGeneSets.rda")
 
 
+
+###########################################################
+################# LAI2021 IMPORT FROM CSV #################
+# 4/28/25 Bob talked about importing the gene set data from a csv, see how well this works
+
+# Using LAI2021
+Lai2021_GeneSets <- read.csv("GeneSet_Data/Lai2021_GeneSets.csv")
+
+# Create a list where each GeneSet is a named element
+# Needs to be called allGeneSets so it is easier to load with all the others
+allGeneSets <- split(Lai2021_GeneSets$Gene, Lai2021_GeneSets$GeneSet)
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/Lai2021GeneSets.rda")
+
+
+
+
+
+
 ###########################################################
 ###################### FORMAT FOR GSEA ####################
 
 # Code written by chatGPT
-write.gmt <- function(gene_list, file) {
-  lines <- lapply(names(gene_list), function(set_name) { # For each list name in the gene set list...
-    genes <- gene_list[[set_name]] # Grab the genes in that list
-    c(set_name, "na", genes)  # Designate the row to exist in the file for .gmt format. 3 columns, one line
-    # lines is this row made at the end!
-  })
-  
-  con <- file(file, open = "wt") # Opens a file connection to write text 
-  writeLines(sapply(lines, function(x) paste(x, collapse = "\t")), con) # Writes all the lines made above to the con file connection
-  close(con)
-}
-
-# Example usage:
-write.gmt(allGeneSets, file = "ForGSEA/EllaGeneSets.gmt")
+# write.gmt <- function(gene_list, file) {
+#   lines <- lapply(names(gene_list), function(set_name) { # For each list name in the gene set list...
+#     genes <- gene_list[[set_name]] # Grab the genes in that list
+#     c(set_name, "na", genes)  # Designate the row to exist in the file for .gmt format. 3 columns, one line
+#     # lines is this row made at the end!
+#   })
+#   
+#   con <- file(file, open = "wt") # Opens a file connection to write text 
+#   writeLines(sapply(lines, function(x) paste(x, collapse = "\t")), con) # Writes all the lines made above to the con file connection
+#   close(con)
+# }
+# 
+# # Example usage:
+# write.gmt(allGeneSets, file = "ForGSEA/EllaGeneSets.gmt")
 
