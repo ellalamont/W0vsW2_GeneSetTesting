@@ -20,7 +20,13 @@ ui <- fluidPage(
            # Dropdown for selecting which rda file (gene set source)
            selectInput("my_GeneSetSource",
                        label = "Gene Set Source",
-                       choices = names(allGeneSetList))
+                       choices = names(allGeneSetList)),
+           
+           # Adjust text size
+           numericInput("my_text_size", 
+                        label = "Text size", 
+                        value = 1.1, min = 0.5, max = 2, step = 0.1),
+           
            ),
     
     column(width = 9, # Max is 12...
@@ -55,7 +61,7 @@ server <- function(input, output, session){
                       left.label = paste0(Left_DataSet, " (n=3)"), 
                       right.label = paste0(Right_DataSet, " (n=3)"),
                       xRange = 4, # Changes how far out the log2fold change axis goes
-                      text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
+                      text.cex = input$my_text_size, pt.cex = 1.25, lwd = 3.5) 
   })
 }
 
