@@ -10,7 +10,7 @@ ui <- fluidPage(
   titlePanel("Forest Plots"),
   
   fluidRow(
-    column(width = 4,
+    column(width = 3,
            
            # Dropdown for selecting with DEG file to use
            selectInput("my_DEG_file",
@@ -23,14 +23,24 @@ ui <- fluidPage(
                        choices = names(allGeneSetList))
            ),
     
-    column(width = 8, # Max is 12...
-           plotOutput("forest_plot"))
+    column(width = 9, # Max is 12...
+           plotOutput("forest_plot", height = "650px"))
+           # uiOutput("dynamic_forest_plot")) # To make the Forest plot change length based on number of gene sets
     )
   )
 
 
 # Define server logic ----
 server <- function(input, output, session){
+  
+  # To make the Forest plot change length based on number of gene sets
+  # output$dynamic_forest_plot <- renderUI({
+  #   n_GeneSets <- length(allGeneSetList[[input$my_GeneSetSource]])
+  #   base_height <- 200 # minimum height (pixels)
+  #   height_per_gene <- 1.5 # how many pixels per gene set
+  #   plot_height <- max(base_height, n_GeneSets * height_per_gene)
+  #   plotOutput("forest_plot", height = paste0(plot_height, "px"))
+  # })
   
   # Make the Forest Plot
   output$forest_plot <- renderPlot({
@@ -40,7 +50,7 @@ server <- function(input, output, session){
     Left_DataSet  <- split_name[3]
     
     plotGeneSetForest(file = list_dfs[[input$my_DEG_file]],
-                      geneSets =allGeneSetList[[input$my_GeneSetSource]],
+                      geneSets = allGeneSetList[[input$my_GeneSetSource]],
                       main = input$my_DEG_file,
                       left.label = paste0(Left_DataSet, " (n=3)"), 
                       right.label = paste0(Right_DataSet, " (n=3)"),
