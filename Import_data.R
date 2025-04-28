@@ -21,6 +21,12 @@ library(corrplot)
 library(ggcorrplot)
 library(ggfortify) # To make pca plots with plotly
 
+# DuffyTools
+library(devtools)
+# install_github("robertdouglasmorrison/DuffyTools")
+library(DuffyTools)
+install_github("robertdouglasmorrison/DuffyNGS")
+
 # if (!require("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
 # BiocManager::install("Biobase")
