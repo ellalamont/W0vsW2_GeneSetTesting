@@ -25,7 +25,7 @@ library(ggfortify) # To make pca plots with plotly
 library(devtools)
 # install_github("robertdouglasmorrison/DuffyTools")
 library(DuffyTools)
-install_github("robertdouglasmorrison/DuffyNGS")
+# install_github("robertdouglasmorrison/DuffyNGS")
 
 # if (!require("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")

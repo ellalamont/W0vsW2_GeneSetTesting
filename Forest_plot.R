@@ -57,11 +57,15 @@ plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
 
 
 
+##### TESTING FOR SHINY
 
 
 
+split_name <- strsplit("W0.ComparedTo.Broth", "\\.")[[1]] # Separate the df_name by the .
+Right_DataSet <- split_name[1]
+Left_DataSet  <- split_name[3]
 
-
+length(allGeneSetList$EllaGeneSets) # 5
 
 
 plotGeneSetForest(file = list_dfs[W0.ComparedTo.Broth],

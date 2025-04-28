@@ -1,6 +1,4 @@
 library(shiny)
-library(gmodels) # Do I need this?
-library(grid) # Do I need this?
 
 # dev.off() # Sometimes need this to get the shiny to show the pheatmap?
 
@@ -37,10 +35,15 @@ server <- function(input, output, session){
   # Make the Forest Plot
   output$forest_plot <- renderPlot({
     
+    split_name <- strsplit(input$my_DEG_file, "\\.")[[1]] # Separate the df_name by the .
+    Right_DataSet <- split_name[1]
+    Left_DataSet  <- split_name[3]
+    
     plotGeneSetForest(file = list_dfs[[input$my_DEG_file]],
                       geneSets =allGeneSetList[[input$my_GeneSetSource]],
-                      main = "Testing",
-                      # left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
+                      main = input$my_DEG_file,
+                      left.label = paste0(Left_DataSet, " (n=3)"), 
+                      right.label = paste0(Right_DataSet, " (n=3)"),
                       xRange = 4, # Changes how far out the log2fold change axis goes
                       text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
   })
