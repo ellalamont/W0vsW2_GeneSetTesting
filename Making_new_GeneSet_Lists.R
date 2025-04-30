@@ -4,6 +4,7 @@
 
 # Once I save the rda files they should just load when I load Import_data.R and I shouldn't have to run this code again
 
+# 4/29/25: Re-doing this so I start from csvs instead of manually typing everything. Will have to convert my current .rda files to csv
 
 
 source("Import_data.R")
@@ -98,12 +99,21 @@ save(allGeneSets, file = "GeneSet_Data/Cole1998GeneSets.rda")
 # Mycobrowsered "zinc" 
 
 # Needs to be called allGeneSets so it is easier to load with all the others
-allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "Rv1915", "Rv1916", "Rv1837c", "Rv3323c", "Rv1131", "Rv1129c", "Rv1130"),
-                    "ATP synthase" = c("Rv1308", "Rv1304", "Rv1311", "Rv1310", "Rv1305", "Rv1306", "Rv1309", "Rv1307"),
-                    "TCA cycle" = c("Rv1475c", "Rv0889c", "Rv2498c", "Rv1098c", "Rv1131", "Rv0896", "Rv3339c", "Rv0066c", "Rv0794c", "Rv1240", "Rv2967c", "Rv3318", "Rv3319", "Rv3316", "Rv3317", "Rv1248c", "Rv2215", "Rv0951", "Rv0952"),
-                    "Zinc related" = c("Rv0198c", "Rv2359", "Rv2782c", "Rv3610c", "Rv0162c", "Rv0761c", "Rv3086"),
-                    "SL1 biosynthetic pathway" = c("Rv3820c", "Rv3821", "Rv3822", "Rv3823c", "Rv3824c", "Rv3825c", "Rv0295c", "Rv1182", "Rv3826")
-                    )
+# allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "Rv1915", "Rv1916", "Rv1837c", "Rv3323c", "Rv1131", "Rv1129c", "Rv1130"),
+#                     "ATP synthase" = c("Rv1308", "Rv1304", "Rv1311", "Rv1310", "Rv1305", "Rv1306", "Rv1309", "Rv1307"),
+#                     "TCA cycle" = c("Rv1475c", "Rv0889c", "Rv2498c", "Rv1098c", "Rv1131", "Rv0896", "Rv3339c", "Rv0066c", "Rv0794c", "Rv1240", "Rv2967c", "Rv3318", "Rv3319", "Rv3316", "Rv3317", "Rv1248c", "Rv2215", "Rv0951", "Rv0952"),
+#                     "Zinc related" = c("Rv0198c", "Rv2359", "Rv2782c", "Rv3610c", "Rv0162c", "Rv0761c", "Rv3086"),
+#                     "SL1 biosynthetic pathway" = c("Rv3820c", "Rv3821", "Rv3822", "Rv3823c", "Rv3824c", "Rv3825c", "Rv0295c", "Rv1182", "Rv3826")
+#                     )
+
+# Save What I have so far as a .csv
+allGeneSets <- stack(allGeneSets)
+colnames(allGeneSets) <- c("Gene", "GeneSet")
+write.csv(allGeneSets, "GeneSet_Data/EllaGeneSets_Test.csv", row.names = FALSE)
+
+# Reload to make sure it works
+Ella_GeneSets_test <- read.csv("EllaGeneSets_Test.csv")
+allGeneSets <- split(Ella_GeneSets_test$Gene, Ella_GeneSets_test$GeneSet)
 
 # SAVE AS RDA FOR LATER 
 save(allGeneSets, file = "GeneSet_Data/EllaGeneSets.rda")
@@ -115,6 +125,7 @@ save(allGeneSets, file = "GeneSet_Data/EllaGeneSets.rda")
 # 4/28/25 Bob talked about importing the gene set data from a csv, see how well this works
 
 # Using LAI2021
+# Made the .csv file by hand
 Lai2021_GeneSets <- read.csv("GeneSet_Data/Lai2021_GeneSets.csv")
 
 # Create a list where each GeneSet is a named element
