@@ -22,12 +22,12 @@ my_annotation_colors <- list(
 # Add metadata for the GENEs!!
 # Use Bob's MTb.TB.Phenotypes.AllGeneSets
 ### but what happens if one gene is in multiple sets?
-my_tpm_W0vsBroth_2 <- my_tpm_W0vsBroth %>%
-  rownames_to_column(var = "Gene") %>%
-  mutate(GeneSet = sapply(Gene, function(g) {
-    match_set <- names(MTb.TB.Phenotypes.AllGeneSets)[sapply(MTb.TB.Phenotypes.AllGeneSets, function(x) g %in% x)]
-    if (length(match_set) > 0) match_set else "NA"
-  }))
+# my_tpm_W0vsBroth_2 <- my_tpm_W0vsBroth %>%
+#   rownames_to_column(var = "Gene") %>%
+#   mutate(GeneSet = sapply(Gene, function(g) {
+#     match_set <- names(MTb.TB.Phenotypes.AllGeneSets)[sapply(MTb.TB.Phenotypes.AllGeneSets, function(x) g %in% x)]
+#     if (length(match_set) > 0) match_set else "NA"
+#   }))
 
 
 # Filter so there are fewer genes to deal with right now
