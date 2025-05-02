@@ -15,7 +15,7 @@ library(rstatix) # for adjust_pvalue
 library(ggpmisc) # https://stackoverflow.com/questions/7549694/add-regression-line-equation-and-r2-on-graph
 library(ggrepel)
 library(pheatmap)
-library(dendextend) # May need this for looking at pheatmap clustering
+# library(dendextend) # May need this for looking at pheatmap clustering
 library(ggplotify) # To convert pheatmaps to ggplots
 library(corrplot)
 library(ggcorrplot)
@@ -26,6 +26,7 @@ library(devtools)
 # install_github("robertdouglasmorrison/DuffyTools")
 library(DuffyTools)
 # install_github("robertdouglasmorrison/DuffyNGS")
+# BiocManager::install("robertdouglasmorrison/DuffyTools")
 
 # if (!require("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
