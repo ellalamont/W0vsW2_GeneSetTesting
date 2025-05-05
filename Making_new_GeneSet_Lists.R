@@ -83,13 +83,6 @@ save(allGeneSets, file = "GeneSet_Data/Sharma2017GeneSets.rda")
 ######################## COLE1998 #########################
 # Switching to making in excel
 
-# allGeneSets <- list("Ribosomal proteins" = c("Rv3100c", "Rv3420c", "Rv0995", "Rv0641", "Rv0704", "Rv0701", "Rv0702", "Rv0716", "Rv0719", "Rv0056", "Rv0651", "Rv0640", "Rv0652", "Rv3443c", "Rv0714", "Rv0723", "Rv0708", "Rv3456c", "Rv0720", "Rv2904c", "Rv1643", "Rv2442c", "Rv0706", "Rv0703", "Rv0715", "Rv1015c", "Rv2441c", "Rv0105c", "Rv2058c", "Rv0709", "Rv0722", "Rv1298", "Rv2057c", "Rv3924c", "Rv1642", "Rv3461c", "Rv1630", "Rv2890c", "Rv0707", "Rv3458c", "Rv0721", "Rv0053", "Rv0683", "Rv0718", "Rv3442c", "Rv0700", "Rv3459c", "Rv0682", "Rv3460c", "Rv0717", "Rv2056c", "Rv2785c", "Rv2909c", "Rv0710", "Rv0055", "Rv2055c", "Rv0705", "Rv2412", "Rv3241c"),
-#                     "Electron transport" = c("Rv0409", "Rv1623c", "Rv1622c", "Rv1620c", "Rv1621c", "Rv2007c", "Rv3554", "Rv1177", "Rv3503c", "Rv3029c", "Rv3028c", "Rv3106", "Rv0886", "Rv3251c", "Rv3250c"),
-#                     "Lipid biosynthesis" = c("Rv3285", "Rv0904c", "Rv3799c", "Rv3280", "Rv2247", "Rv2244", "Rv2523c", "Rv2243", "Rv0639", "Rv1483", "Rv1350", "Rv2002", "Rv0242c", "Rv2524c", "Rv1484", "Rv2245", "Rv2246", "Rv1618", "Rv2605c", "Rv0033", "Rv1344", "Rv1722", "Rv3221c", "Rv3472"),
-#                     "Gluconeogenesis" = c("Rv0211", "Rv0069c")
-#                     )
-
-
 # DO NOT RUN THIS AGAIN! Has been edited in excel after writing (5/2/25)
 # Save What I have so far as a .csv
 # allGeneSets <- stack(allGeneSets)
@@ -110,27 +103,18 @@ save(allGeneSets, file = "GeneSet_Data/Cole1998_GeneSets.rda")
 # https://pmc.ncbi.nlm.nih.gov/articles/PMC6851703/ for tca cycle genes
 # Mycobrowsered "zinc" 
 
-# Needs to be called allGeneSets so it is easier to load with all the others
-# allGeneSets <- list("glyoxylate bypass and methylcitrate cycle" = c("Rv0467", "Rv1915", "Rv1916", "Rv1837c", "Rv3323c", "Rv1131", "Rv1129c", "Rv1130"),
-#                     "ATP synthase" = c("Rv1308", "Rv1304", "Rv1311", "Rv1310", "Rv1305", "Rv1306", "Rv1309", "Rv1307"),
-#                     "TCA cycle" = c("Rv1475c", "Rv0889c", "Rv2498c", "Rv1098c", "Rv1131", "Rv0896", "Rv3339c", "Rv0066c", "Rv0794c", "Rv1240", "Rv2967c", "Rv3318", "Rv3319", "Rv3316", "Rv3317", "Rv1248c", "Rv2215", "Rv0951", "Rv0952"),
-#                     "Zinc related" = c("Rv0198c", "Rv2359", "Rv2782c", "Rv3610c", "Rv0162c", "Rv0761c", "Rv3086"),
-#                     "SL1 biosynthetic pathway" = c("Rv3820c", "Rv3821", "Rv3822", "Rv3823c", "Rv3824c", "Rv3825c", "Rv0295c", "Rv1182", "Rv3826")
-#                     )
-
 # Save What I have so far as a .csv
 # allGeneSets <- stack(allGeneSets)
 # colnames(allGeneSets) <- c("Gene", "GeneSet")
 # DO NOT RUN THIS AGAIN! Has been edited in excel after writing (5/2/25)
 # write.csv(allGeneSets, "GeneSet_Data/Ella_GeneSets_REPEAT.csv", row.names = FALSE)
 
-# Reload to make sure it works
+# Reload - Need to do this every time to get it saved as a .rda!
 Ella_GeneSets <- read.csv("GeneSet_Data/Ella_GeneSets.csv")
 allGeneSets <- split(Ella_GeneSets$Gene, Ella_GeneSets$GeneSet)
 
 # SAVE AS RDA FOR LATER 
 save(allGeneSets, file = "GeneSet_Data/Ella_GeneSets.rda")
-
 
 
 ###########################################################
@@ -178,32 +162,42 @@ allGeneSets <- split(Mycobrowser_GeneSets$Gene, Mycobrowser_GeneSets$GeneSet)
 save(allGeneSets, file = "GeneSet_Data/Mycobrowser_GeneSets.rda")
 
 
-
-
-
-
-
-
-
-
-
-
 ###########################################################
-###################### FORMAT FOR GSEA ####################
+############# MAKE NEW LIST FROM OTHER LISTS ##############
 
-# Code written by chatGPT
-# write.gmt <- function(gene_list, file) {
-#   lines <- lapply(names(gene_list), function(set_name) { # For each list name in the gene set list...
-#     genes <- gene_list[[set_name]] # Grab the genes in that list
-#     c(set_name, "na", genes)  # Designate the row to exist in the file for .gmt format. 3 columns, one line
-#     # lines is this row made at the end!
-#   })
-#   
-#   con <- file(file, open = "wt") # Opens a file connection to write text 
-#   writeLines(sapply(lines, function(x) paste(x, collapse = "\t")), con) # Writes all the lines made above to the con file connection
-#   close(con)
-# }
-# 
-# # Example usage:
-# write.gmt(allGeneSets, file = "ForGSEA/EllaGeneSets.gmt")
+# For the CLEAR-TB, what pathways am I interested in 
+# oxidative stress, iron, lipids
+allGeneSetList$MTb.MetabolicPathways$`Oxidative Stress`
+# [1] "Rv0374c" "Rv0432"  "Rv2855"  "Rv3170"  "Rv3846"  "Rv3914" 
+allGeneSetList[["MTb.GO.BiologicalProcess"]][["cellular response to oxidative stress "]]
+# [1] "Rv0147"  "Rv0924c" "Rv1223"  "Rv1316c" "Rv1447c" "Rv2428"  "Rv2783c"
 
+# Iron uptake, utilization, storage, scavenging
+allGeneSetList[["MTb.GO.MolecularFunction"]][["2 iron, 2 sulfur cluster binding "]]
+allGeneSetList[["MTb.GO.MolecularFunction"]][["4 iron, 4 sulfur cluster binding "]]
+allGeneSetList[["MTb.GO.MolecularFunction"]][["iron ion binding "]]
+allGeneSetList[["MTb.GO.MolecularFunction"]][["iron-sulfur cluster binding "]]
+allGeneSetList[["MTb.GO.BiologicalProcess"]][["cellular iron ion homeostasis "]]
+allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][["iron ion transport"]]
+allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][["iron-sulfur cluster binding"]]
+
+# Lipids
+allGeneSetList[["MTb.Tuberculist.FunctionalGroups"]][["lipid metabolism"]]
+allGeneSetList[["MTb.Regulons"]][["kstR"]]
+allGeneSetList[["MTb.Regulons"]][["kstR2"]]
+allGeneSetList[["Ella_GeneSets"]][["glyoxylate bypass and methylcitrate cycle"]]
+
+# ClearTB_GeneSet_list
+allGeneSets <- c(
+  allGeneSetList[["MTb.MetabolicPathways"]][c("Oxidative Stress")],
+  allGeneSetList[["MTb.GO.BiologicalProcess"]][c("cellular response to oxidative stress ")],
+  allGeneSetList[["MTb.GO.MolecularFunction"]][c("2 iron, 2 sulfur cluster binding ", "4 iron, 4 sulfur cluster binding ", "iron ion binding ", "iron-sulfur cluster binding ")],
+  allGeneSetList[["MTb.GO.BiologicalProcess"]][c("cellular iron ion homeostasis ")],
+  allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][c("iron ion transport", "iron-sulfur cluster binding")],
+  allGeneSetList[["MTb.Tuberculist.FunctionalGroups"]][c("lipid metabolism")],
+  allGeneSetList[["Ella_GeneSets"]][c("glyoxylate bypass and methylcitrate cycle")],
+  allGeneSetList[["MTb.Regulons"]][c("kstR", "kstR2")]
+)
+
+# Save as .rda so it goes into the shiny apps
+save(allGeneSets, file = "GeneSet_Data/ClearTB_GeneSetList.rda")
