@@ -113,25 +113,26 @@ for (i in 1:length(list_dfs)) {
 # names(allGeneSets) <- gsub("<.*", "", names(allGeneSets))
 # `Glycolysis / Gluconeogenesis ` <- allGeneSets$`Glycolysis / Gluconeogenesis ` # Pull this one out and will add it to the functional groups one
 # 
-load("GeneSet_Data/Walter2015GeneSets.rda")
+# load("GeneSet_Data/Walter2015GeneSets.rda")
 # # Add the glycolsis list
 # allGeneSets <- append(allGeneSets, list(`Glycolysis / Gluconeogenesis ` = `Glycolysis / Gluconeogenesis `))
 
+# 5/5/25 commented out, don't think I need 
 # Get list of all .rda files in the folder
-rda_files <- list.files("GeneSet_Data", pattern = "\\.rda$", full.names = TRUE)
-
-# Loop through each file and load it with a name based on the filename
-for (file in rda_files) {
-  file_name <- tools::file_path_sans_ext(basename(file))  # Extract filename without extension
-  env <- new.env()  # Create a temporary environment to load the object
-  load(file, envir = env)  # Load .rda file into this environment
-  
-  # Assign the loaded object to a new variable named after the file
-  assign(file_name, env$allGeneSets)  
-}
-
-# Clean up
-rm(env)  # Remove the temporary environment
+# rda_files <- list.files("GeneSet_Data", pattern = "\\.rda$", full.names = TRUE)
+# 
+# # Loop through each file and load it with a name based on the filename
+# for (file in rda_files) {
+#   file_name <- tools::file_path_sans_ext(basename(file))  # Extract filename without extension
+#   env <- new.env()  # Create a temporary environment to load the object
+#   load(file, envir = env)  # Load .rda file into this environment
+#   
+#   # Assign the loaded object to a new variable named after the file
+#   assign(file_name, env$allGeneSets)  
+# }
+# 
+# # Clean up
+# rm(env)  # Remove the temporary environment
 
 
 # To put them in a list of lists
