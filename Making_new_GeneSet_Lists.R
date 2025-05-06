@@ -201,3 +201,63 @@ allGeneSets <- c(
 
 # Save as .rda so it goes into the shiny apps
 save(allGeneSets, file = "GeneSet_Data/ClearTB_GeneSetList.rda")
+
+
+
+###########################################################
+############ CLEARTB LIST AFTER TALKING TO DRS ############
+# 5/5/25
+# We are interested in iron, metabolizing lipids, glyoxylate shunt and methylcitrate pathway, oxidative stress
+
+# Did a new metaGeneSets run for the W0 vs broth on the lenovo and removed the iModulons and ISB corems to make things easier to read, pull from those
+
+# Iron
+allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][c("iron ion transport")]
+allGeneSetList[["MTb.KEGG.Pathways"]][["Biosynthesis of siderophore group nonribosomal peptides "]]
+allGeneSetList[["MTb.Regulons"]][["ideR"]] # Involved in iron homeostasis https://pmc.ncbi.nlm.nih.gov/articles/PMC3902104/
+
+# Metabolizing lipids
+allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][["isocitrate lyase activity"]]
+allGeneSetList[["MTb.Regulons"]][["Rv0681"]] # https://pmc.ncbi.nlm.nih.gov/articles/PMC9044949/. Transcription factor that regulated lipid metabolism
+allGeneSetList[["MTb.Regulons"]][["prpR"]] # Invovled in the Methylcitrate cycle to deal with cholesterol degradation product propionyl-CoA
+allGeneSetList[["MTb.Tuberculist.FunctionalGroups"]][["lipid metabolism"]]
+allGeneSetList[["MTb.Regulons"]][["mce1R"]] # https://pmc.ncbi.nlm.nih.gov/articles/PMC1347267/ mce1R operon downregulated in vivo
+
+
+# Oxidative stress (hypoxia)
+allGeneSetList[["MTb.Regulons"]][["whiB4"]] # https://pubmed.ncbi.nlm.nih.gov/22780904/ involved in oxidative stress response. Upregulated under hypoxia (https://pmc.ncbi.nlm.nih.gov/articles/PMC3277930/)
+allGeneSetList[["Ella_GeneSets"]][["dosR regulon"]]
+# https://journals.asm.org/doi/10.1128/jb.00705-19 Nitrogen metabolism
+allGeneSetList[["MTb.Regulons"]][["phoP"]]
+allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][["electron transport chain"]]
+
+# ClearTB_GeneSet_list
+allGeneSets <- c(
+  # Iron
+  allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][c("iron ion transport")],
+  allGeneSetList[["MTb.KEGG.Pathways"]][c("Biosynthesis of siderophore group nonribosomal peptides ")],
+  allGeneSetList[["MTb.Regulons"]][c("ideR")],
+  
+  # Lipid metabolism
+  # allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][c("isocitrate lyase activity")],
+  # allGeneSetList[["Ella_GeneSets"]][c("glyoxylate bypass")],
+  # allGeneSetList[["Ella_GeneSets"]][c("glyoxylate bypass and methylcitrate cycle")],
+  allGeneSetList[["MTb.Regulons"]][c("Rv0681")], # https://pmc.ncbi.nlm.nih.gov/articles/PMC9044949/. Transcription factor that regulated lipid metabolism
+  allGeneSetList[["MTb.Regulons"]][c("prpR")], # Invovled in the Methylcitrate cycle to deal with cholesterol degradation product propionyl-CoA
+  allGeneSetList[["MTb.Tuberculist.FunctionalGroups"]][c("lipid metabolism")],
+  allGeneSetList[["MTb.Regulons"]][c("mce1R")], # https://pmc.ncbi.nlm.nih.gov/articles/PMC1347267/ mce1R operon downregulated in vivo
+  
+  # oxidative stress
+  allGeneSetList[["MTb.Regulons"]][c("whiB4")], # https://pubmed.ncbi.nlm.nih.gov/22780904/ involved in oxidative stress response. Upregulated under hypoxia (https://pmc.ncbi.nlm.nih.gov/articles/PMC3277930/)
+  allGeneSetList[["Ella_GeneSets"]][c("dosR regulon")],
+  # https://journals.asm.org/doi/10.1128/jb.00705-19 Nitrogen metabolism
+  allGeneSetList[["MTb.Regulons"]][c("phoP")]
+)
+
+# Change one name so it is shorter
+names(allGeneSets)[names(allGeneSets) == "Biosynthesis of siderophore group nonribosomal peptides "] <- "siderophore biosynthesis"
+names(allGeneSets)[names(allGeneSets) == "glyoxylate bypass and methylcitrate cycle"] <- "glyoxylate bypass\nmethylcitrate cycle"
+
+# Save as .rda so it goes into the shiny apps
+save(allGeneSets, file = "GeneSet_Data/ClearTB_GeneSetList.rda")
+

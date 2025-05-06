@@ -75,8 +75,8 @@ server <- function(input, output, session){
                         main = input$my_DEG_file,
                         left.label = paste0(Left_DataSet, " (n=3)"), 
                         right.label = paste0(Right_DataSet, " (n=3)"),
-                        xRange = 4, # Changes how far out the log2fold change axis goes
-                        text.cex = input$my_text_size, pt.cex = 1.25, lwd = 3.5) 
+                        xRange = 3, # Changes how far out the log2fold change axis goes
+                        text.cex = input$my_text_size, pt.cex = 1.75, lwd = 4.2) 
       })
     
     # To save what the server prints

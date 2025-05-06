@@ -56,10 +56,37 @@ plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
                   text.cex = 1, pt.cex = 1.25, lwd = 3.5) 
 
 
+###########################################################
+################## CLEARTB FOREST PLOT ####################
+
+allGeneSetList$ClearTB_GeneSetList
+
+colors <- c(
+  rep("brown", 3),
+  rep("#17becf", 4),
+  rep("green4", 3)
+)
+
+plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
+                  geneSets = allGeneSetList$ClearTB_GeneSetList,
+                  main = "Forest Plot H37Ra vs W0 sputum",
+                  # left.label = "Mtb broth (n=3)", right.label = "W0 sputum (n=3)",
+                  xRange = 2.5, # Changes how far out the log2fold change axis goes
+                  text.cex = 1.15, pt.cex = 1.25, lwd = 3.5,
+                  min.genes.per.set = 5,
+                  col = colors) 
+
+# Save the plot
+printPlot(filename = "ForestPlot_Figures/ForestPlot_ClearTB_v1.pdf", width = 12, height = 8)
+
+
+
+
+
+
+
 
 ##### TESTING FOR SHINY
-
-
 
 split_name <- strsplit("W0.ComparedTo.Broth", "\\.")[[1]] # Separate the df_name by the .
 Right_DataSet <- split_name[1]
