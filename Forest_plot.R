@@ -62,7 +62,7 @@ plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
 allGeneSetList$ClearTB_GeneSetList
 
 colors <- c(
-  rep("brown", 3),
+  rep("brown", 2),
   rep("#17becf", 4),
   rep("green4", 3)
 )
@@ -77,7 +77,7 @@ plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
                   col = colors) 
 
 # Save the plot
-printPlot(filename = "ForestPlot_Figures/ForestPlot_ClearTB_v1.pdf", width = 12, height = 8)
+printPlot(filename = "ForestPlot_Figures/ForestPlot_ClearTB_v2.pdf", width = 12, height = 8)
 
 
 

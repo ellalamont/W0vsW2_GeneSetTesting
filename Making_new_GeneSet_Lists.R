@@ -236,7 +236,7 @@ allGeneSets <- c(
   # Iron
   allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][c("iron ion transport")],
   allGeneSetList[["MTb.KEGG.Pathways"]][c("Biosynthesis of siderophore group nonribosomal peptides ")],
-  allGeneSetList[["MTb.Regulons"]][c("ideR")],
+  # allGeneSetList[["MTb.Regulons"]][c("ideR")], # Removing this one because it is basically just both the other two gene sets combined
   
   # Lipid metabolism
   # allGeneSetList[["MTb.Tuberculist.GO.Ontology"]][c("isocitrate lyase activity")],
