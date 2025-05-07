@@ -249,9 +249,8 @@ allGeneSets <- c(
   
   # oxidative stress
   allGeneSetList[["MTb.Regulons"]][c("whiB4")], # https://pubmed.ncbi.nlm.nih.gov/22780904/ involved in oxidative stress response. Upregulated under hypoxia (https://pmc.ncbi.nlm.nih.gov/articles/PMC3277930/)
-  allGeneSetList[["Ella_GeneSets"]][c("dosR regulon")],
-  # https://journals.asm.org/doi/10.1128/jb.00705-19 Nitrogen metabolism
-  allGeneSetList[["MTb.Regulons"]][c("phoP")]
+  allGeneSetList[["Ella_GeneSets"]][c("dosR regulon")]
+  # allGeneSetList[["MTb.Regulons"]][c("phoP")]
 )
 
 # Change one name so it is shorter
