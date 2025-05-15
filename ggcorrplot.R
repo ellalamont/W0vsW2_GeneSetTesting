@@ -65,10 +65,10 @@ ggcorrplot_PearsonLog10 <- corr %>%
        fill = "Correlation")
 ggcorrplot_PearsonLog10
 
-# ggsave(ggcorrplot_PearsonLog10,
-#        file = "ggcorrplot_PearsonLog10_v3.pdf",
-#        path = "ggcorrplot_Figures",
-#        width = 7, height = 6, units = "in")
+ggsave(ggcorrplot_PearsonLog10,
+       file = "ggcorrplot_PearsonLog10_v3.pdf",
+       path = "ggcorrplot_Figures",
+       width = 7, height = 6, units = "in")
 
 
 ###########################################################
@@ -108,11 +108,11 @@ ggcorrplot_SpearmanLog10
 ###########################################################
 ################### TRYING OTHER THINGS ###################
 
-pairs(my_tpm_Log10)
-
-# https://borisleroy.com/en/2013/06/09/correlation-plots-in-r/
-install.packages("Rarity")
-library(Rarity)
+# pairs(my_tpm_Log10)
+# 
+# # https://borisleroy.com/en/2013/06/09/correlation-plots-in-r/
+# install.packages("Rarity")
+# library(Rarity)
 
 # Pearson
 # pdf("ggcorrplot_Figures/rarity_PearsonLog10_v1.pdf", width = 10, height = 10)
