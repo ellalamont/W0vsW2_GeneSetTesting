@@ -107,34 +107,6 @@ for (i in 1:length(list_dfs)) {
 ###########################################################
 ###################### LOAD GENE SETS #####################
 
-# Altering these for the class! 
-
-# load("MTb.KEGG.Pathways.rda")
-# names(allGeneSets) <- gsub("<.*", "", names(allGeneSets))
-# `Glycolysis / Gluconeogenesis ` <- allGeneSets$`Glycolysis / Gluconeogenesis ` # Pull this one out and will add it to the functional groups one
-# 
-# load("GeneSet_Data/Walter2015GeneSets.rda")
-# # Add the glycolsis list
-# allGeneSets <- append(allGeneSets, list(`Glycolysis / Gluconeogenesis ` = `Glycolysis / Gluconeogenesis `))
-
-# 5/5/25 commented out, don't think I need 
-# Get list of all .rda files in the folder
-# rda_files <- list.files("GeneSet_Data", pattern = "\\.rda$", full.names = TRUE)
-# 
-# # Loop through each file and load it with a name based on the filename
-# for (file in rda_files) {
-#   file_name <- tools::file_path_sans_ext(basename(file))  # Extract filename without extension
-#   env <- new.env()  # Create a temporary environment to load the object
-#   load(file, envir = env)  # Load .rda file into this environment
-#   
-#   # Assign the loaded object to a new variable named after the file
-#   assign(file_name, env$allGeneSets)  
-# }
-# 
-# # Clean up
-# rm(env)  # Remove the temporary environment
-
-
 # To put them in a list of lists
 rda_files <- list.files("GeneSet_Data", pattern = "\\.rda$", full.names = TRUE)
 allGeneSetList <- list()
@@ -263,6 +235,49 @@ my_pipeSummary$Week <- as.factor(my_pipeSummary$Week)  # Convert back if needed
 my_pipeSummary["Week"]
 
 
+###########################################################
+################# IMPORT GENE LENGTH INFO #################
+
+load("MTb.MapSet.rda")
+H37Rv_ExonMap <- mapSet$exonMap
+
+H37Rv_GeneLengths <- H37Rv_ExonMap %>%
+  mutate(GeneLength = END - POSITION) %>%
+  select(GENE_ID, GeneLength)
+
+###########################################################
+################# IMPORT SHUYI'S DRUG TXN #################
+
+# This is all raw data, so will have to convert to TPM
+
+ShuyiDrug_rawReads <- read.csv("raw_data/INDIGO-transcriptomes-all_v1.csv")
+ShuyiDrug_metadata <- read.csv("raw_data/INDIGO-metadata.csv")
+
+ShuyiDrug_1 <- ShuyiDrug_rawReads %>% 
+  filter(Drug %in% c("EMB", "RIF", "PZA", "INH")) %>%
+  filter(Strain == "H37Rv")
+
+# Convert to TPM
+# TPM = (Read Count / Gene Length in kb) / sum(Read Count / Gene Length in kb for all genes) * 1e6
+# Step 1: Ensure gene lengths are in the same order as raw_counts columns
+gene_lengths_ordered <- H37Rv_GeneLengths %>%
+  filter(GENE_ID %in% colnames(ShuyiDrug_1)) %>%
+  arrange(match(GENE_ID, colnames(ShuyiDrug_1)))  # Make sure order matches
+# Step 2: Convert gene lengths to kilobases
+gene_lengths_kb <- gene_lengths_ordered$GeneLength / 1000
+
+# Grab just the gene columns from the rawReads
+rawReads_only <- raw_counts %>%
+  select(any_of(gene_lengths$gene))
+
+# Step 3: Calculate RPK (Reads Per Kilobase)
+rpk_df <- sweep(ShuyiDrug_rawReads, 2, gene_lengths_kb, FUN = "/")
+
+
+ShuyiDrug_Average <- ShuyiDrug_1 %>%
+  group_by(Drug) %>%
+  summarize(across(where(is.numeric), mean, na.rm = T))
+  
 
 
 
