@@ -236,16 +236,6 @@ my_pipeSummary["Week"]
 
 
 ###########################################################
-################# IMPORT GENE LENGTH INFO #################
-
-load("MTb.MapSet.rda")
-H37Rv_ExonMap <- mapSet$exonMap
-
-H37Rv_GeneLengths <- H37Rv_ExonMap %>%
-  mutate(GeneLength = END - POSITION) %>%
-  select(GENE_ID, GeneLength)
-
-###########################################################
 ################# IMPORT SHUYI'S DRUG TXN #################
 
 # This is all raw data, so will have to convert to TPM
@@ -257,28 +247,96 @@ ShuyiDrug_1 <- ShuyiDrug_rawReads %>%
   filter(Drug %in% c("EMB", "RIF", "PZA", "INH")) %>%
   filter(Strain == "H37Rv")
 
-# Convert to TPM
-# TPM = (Read Count / Gene Length in kb) / sum(Read Count / Gene Length in kb for all genes) * 1e6
-# Step 1: Ensure gene lengths are in the same order as raw_counts columns
-gene_lengths_ordered <- H37Rv_GeneLengths %>%
-  filter(GENE_ID %in% colnames(ShuyiDrug_1)) %>%
-  arrange(match(GENE_ID, colnames(ShuyiDrug_1)))  # Make sure order matches
-# Step 2: Convert gene lengths to kilobases
-gene_lengths_kb <- gene_lengths_ordered$GeneLength / 1000
+
+###########################################################
+################# COVERT RAW READS TO TPM #################
+
+# Import Gene length info
+load("MTb.MapSet.rda")
+H37Rv_ExonMap <- mapSet$exonMap
+H37Rv_GeneLengths <- H37Rv_ExonMap %>%
+  mutate(GeneLength = END - POSITION) %>%
+  select(GENE_ID, GeneLength)
 
 # Grab just the gene columns from the rawReads
-rawReads_only <- raw_counts %>%
-  select(any_of(gene_lengths$gene))
+rawReadColumns_only <- ShuyiDrug_1 %>%
+  select(any_of(H37Rv_GeneLengths$GENE_ID))
+non_gene_metadata <- ShuyiDrug_1 %>%
+  select(-any_of(H37Rv_GeneLengths$GENE_ID))
 
-# Step 3: Calculate RPK (Reads Per Kilobase)
-rpk_df <- sweep(ShuyiDrug_rawReads, 2, gene_lengths_kb, FUN = "/")
-
-
-ShuyiDrug_Average <- ShuyiDrug_1 %>%
-  group_by(Drug) %>%
-  summarize(across(where(is.numeric), mean, na.rm = T))
+# Make a rawCount -> TPM function
+raw.to.tpm_func <- function(rawReads_df) {
+  # TPM = (Read Count / Gene Length in kb) / sum(Read Count / Gene Length in kb for all genes) * 1e6
   
+  # Ensure gene lengths are in the same order as raw_counts columns
+  gene_lengths_ordered <- H37Rv_GeneLengths %>%
+    filter(GENE_ID %in% colnames(rawReads_df)) %>%
+    arrange(match(GENE_ID, colnames(rawReads_df)))  # Make sure order matches
+  
+  # Convert gene lengths to kilobases
+  gene_lengths_kb <- (gene_lengths_ordered$GeneLength) / 1000
+  
+  # Calculate RPK (Reads Per Kilobase)
+  rpk_df <- sweep(rawReads_df, 2, gene_lengths_kb, FUN = "/")
+  
+  # Calculate per-sample scaling factor (sum of RPKs/1e6). The per million scaling factor
+  scaling_factors <- rowSums(rpk_df)/1e6
+  # Calculate TPM
+  tpm_df <- sweep(rpk_df, 1, scaling_factors, FUN = "/")
+}
+tpm_df <- raw.to.tpm_func(rawReadColumns_only)
+rowSums(tpm_df) # check it's at 1 million
+
+# Add the metadata back to the tpm data
+ShuyiDrug_tpm <- cbind(non_gene_metadata, tpm_df)
+
+# Average all the samples together
+ShuyiDrug_tpm_Average <- ShuyiDrug_tpm %>%
+  group_by(Drug) %>%
+  summarize(across(where(is.numeric), mean, na.rm = T)) %>%
+  select(-Batch) %>%
+  t() %>%
+  as.data.frame()
+colnames(ShuyiDrug_tpm_Average) <- ShuyiDrug_tpm_Average[1,] # Add column names
+ShuyiDrug_tpm_Average <- ShuyiDrug_tpm_Average[-1,] # Remove the old column name row
+ShuyiDrug_tpm_Average <- ShuyiDrug_tpm_Average %>%
+  mutate(across(everything(), as.numeric)) # Make everything numberic
+
+# Do all the adjustments without the averages
+ShuyiDrug_tpm2 <- ShuyiDrug_tpm %>%
+  t() %>%
+  as.data.frame()
+colnames(ShuyiDrug_tpm2) <- ShuyiDrug_tpm2[1,] # Add column names
+ShuyiDrug_tpm2 <- ShuyiDrug_tpm2[-c(1:6),] # Remove the old column name row
+ShuyiDrug_tpm2 <- ShuyiDrug_tpm2 %>%
+  mutate(across(everything(), as.numeric)) # Make everything numberic
+
+# ***********
+# Check the TPM is the same with my TPM samples
+ProbeTest5_rawReads <- read.csv("raw_data/ProbeTest5_Mtb.Expression.Gene.Data.ReadsM_moreTrim.csv")
+# transpose
+ProbeTest5_rawReads_t <- t(ProbeTest5_rawReads) %>% as.data.frame()
+colnames(ProbeTest5_rawReads_t) <- ProbeTest5_rawReads_t[1,]
+ProbeTest5_rawReads_t <- ProbeTest5_rawReads_t[-1,]
+ProbeTest5_rawReads_t <- ProbeTest5_rawReads_t %>%
+  mutate(across(everything(), as.numeric))
+ProbeTest5_rawReads_tpm_test <- raw.to.tpm_func(ProbeTest5_rawReads_t)
+ProbeTest5_rawReads_tpm_test_t <- t(ProbeTest5_rawReads_tpm_test)
+# Compare this to ProbeTest5_tpm... not identical, but issues may be due to rounding somewhere....
+# ***********
 
 
+###########################################################
+################ COMBINE MINE AND SHUYI TPM ###############
+# I'm using the TPM that Bob makes and the TPM I made from Shuyi's raw reads
+colSums(my_tpm) # Check this is the corrected TPM
+
+my_shuyi_tpm <- merge(my_tpm, ShuyiDrug_tpm_Average, by = "row.names", all = TRUE)
+# Interesting that Shuyi's data is missing the MT and the rvn etc genes.....
+
+# Keep only the genes that all samples have values for 
+my_shuyi_tpm_filtered <- merge(my_tpm, ShuyiDrug_tpm2, by = "row.names", all = F)
+rownames(my_shuyi_tpm_filtered) <- my_shuyi_tpm_filtered$Row.names
+my_shuyi_tpm_filtered <- my_shuyi_tpm_filtered[, -1]  # remove the now-redundant Row.names column
 
 
