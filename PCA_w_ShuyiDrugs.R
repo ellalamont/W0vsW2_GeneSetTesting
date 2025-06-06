@@ -9,7 +9,8 @@
 # Two options in base R, prcomp() and princomp()
 # prcomp() is preferred according to the website above
 
-source("Import_data.R") # to get my_shuyi_tpm_filtered
+source("Import_data.R") 
+source("Import_data_w_Drugs.R") # To get Sputum_w_Drug_rawReads_BatchCorrected_cpm and Sputum_w_Drug_metadata and Sputum_w_Drug_rawReads_cpm
 
 # Plot basics
 my_plot_themes <- theme_bw() +
@@ -32,62 +33,103 @@ my_plot_themes <- theme_bw() +
 
 
 ###########################################################
-############### MY_TPM WITH SHUYI DRUGS ALL ###############
+################### BATCH CORRECTED CPM ###################
 
 # Transform the data
-my_shuyi_tpm_filtered_t <- as.data.frame(t(my_shuyi_tpm_filtered))
+my_cpm_t <- as.data.frame(t(Sputum_w_Drug_rawReads_BatchCorrected_cpm))
 
 # Remove columns that are all zero so the scale works for prcomp
-my_shuyi_tpm_filtered_t2 <- my_shuyi_tpm_filtered_t %>% select_if(colSums(.) != 0)
+my_cpm_t2 <- my_cpm_t %>% select_if(colSums(.) != 0)
 
 # Make the actual PCA
-my_PCA <- prcomp(my_shuyi_tpm_filtered_t2, scale = TRUE)
+my_PCA <- prcomp(my_cpm_t2, scale = TRUE)
 
 # See the % Variance explained
 summary(my_PCA)
 summary_PCA <- format(round(as.data.frame(summary(my_PCA)[["importance"]]['Proportion of Variance',]) * 100, digits = 1), nsmall = 1) # format and round used to control the digits after the decimal place
-summary_PCA[1,1] # PC1 explains 29.5% of variance
-summary_PCA[2,1] # PC2 explains 12.6% of variance
-summary_PCA[3,1] # PC3 explains 10.0% of variance
+summary_PCA[1,1] # PC1 explains 26.2% of variance
+summary_PCA[2,1] # PC2 explains 13.0% of variance
+summary_PCA[3,1] # PC3 explains 10.8% of variance
 
 # MAKE PCA PLOT with GGPLOT 
 my_PCA_df <- as.data.frame(my_PCA$x[, 1:3]) # Extract the first 3 PCs
 my_PCA_df <- data.frame(SampleID = row.names(my_PCA_df), my_PCA_df)
-# my_PCA_df <- merge(my_PCA_df, my_metadata, by = "SampleID", )
-
-labels <- c(
-  "S_250754" = "W0 sputum",
-  "S_355466" = "W0 sputum",
-  "S_503557" = "W0 sputum",
-  "S_503937" = "W2 sputum",
-  "S_575533_MtbrRNA" = "W2 sputum",
-  "S_577208" = "W2 sputum",
-  "H37Ra_Broth_4" = "Not captured broth",
-  "H37Ra_Broth_5" = "Not captured broth",
-  "H37Ra_Broth_6" = "Not captured broth",
-  "5_EMBTRUE_D0_DrugRNAseq_U_R" = "EMB",
-  "INH" = "Untreated",
-  "PZA" = "Control",
-  "RIF" = "Control"
-)
-
-# Add the labels I want by hand here, NEED TO DOUBLE CHECK THEY ARE CORRECT!
-my_PCA_df <- my_PCA_df %>% 
-  mutate(Labelling = c())
+my_PCA_df <- merge(my_PCA_df, Sputum_w_Drug_metadata, by = "SampleID")
 
 
 fig_PC1vsPC2 <- my_PCA_df %>% 
   ggplot(aes(x = PC1, y = PC2)) + 
-  geom_point() + 
-  # geom_point(aes(fill = Labelling, shape = Labelling), size = 6, alpha = 0.8, stroke = 0.8) + 
-  # scale_fill_manual(values=c(`W0 sputum` = "#0072B2", `W2 sputum` = "#E66900", `Not captured broth`= "#999999")) +  
-  # scale_shape_manual(values=c(`W0 sputum` = 21, `W2 sputum` = 22, `Not captured broth`= 23)) + 
+  geom_point(aes(fill = Label, shape = Label2), size = 6, alpha = 0.8, stroke = 0.8) + 
+  scale_fill_manual(values=c(`Week 0 sputum` = "#0072B2", `Week 2 sputum` = "#E66900", `Log broth`= "#999999", `RIF` = "#D32F2F", `PZA` = "#008080", `INH` = "#808000", `EMB` = "#B39DDB")) +  
+  scale_shape_manual(values=c(`Sputum` = 21, `Log broth` = 22, `Drug`= 23)) + 
   # geom_text_repel(aes(label = Week), size= 2.5, box.padding = 0.4, segment.color = NA, max.overlaps = Inf) + 
   geom_text(aes(label = SampleID)) + 
-  labs(title = "PCA ",
-       # subtitle = "All normal Depletion, no thresholds",
+  guides(fill = guide_legend(order = 1, override.aes = list(shape = 21)),
+    shape = guide_legend(order = 1)) +
+  labs(fill = "Sample Type", 
+    shape = "Sample Type",
+    title = "PCA: Batch Correct CPM, Sputum vs Drug transcriptomes",
+    x = paste0("PC1: ", summary_PCA[1,1], "%"),
+    y = paste0("PC2: ", summary_PCA[2,1], "%")) +
+  my_plot_themes
+fig_PC1vsPC2
+
+ggsave(fig_PC1vsPC2,
+       file = "PCA_SputumVsDrug_BatchCorrect_cpm.pdf",
+       path = "PCA_Figures",
+       width = 9, height = 6, units = "in")
+
+
+
+###########################################################
+######################## CPM ONLY #########################
+
+# Transform the data
+my_cpm_t <- as.data.frame(t(Sputum_w_Drug_rawReads_cpm))
+
+# Remove columns that are all zero so the scale works for prcomp
+my_cpm_t2 <- my_cpm_t %>% select_if(colSums(.) != 0)
+
+# Make the actual PCA
+my_PCA <- prcomp(my_cpm_t2, scale = TRUE)
+
+# See the % Variance explained
+summary(my_PCA)
+summary_PCA <- format(round(as.data.frame(summary(my_PCA)[["importance"]]['Proportion of Variance',]) * 100, digits = 1), nsmall = 1) # format and round used to control the digits after the decimal place
+summary_PCA[1,1] # PC1 explains 28.9% of variance
+summary_PCA[2,1] # PC2 explains 11.4% of variance
+summary_PCA[3,1] # PC3 explains 10.1% of variance
+
+# MAKE PCA PLOT with GGPLOT 
+my_PCA_df <- as.data.frame(my_PCA$x[, 1:3]) # Extract the first 3 PCs
+my_PCA_df <- data.frame(SampleID = row.names(my_PCA_df), my_PCA_df)
+my_PCA_df <- merge(my_PCA_df, Sputum_w_Drug_metadata, by = "SampleID")
+
+
+fig_PC1vsPC2 <- my_PCA_df %>% 
+  ggplot(aes(x = PC1, y = PC2)) + 
+  geom_point(aes(fill = Label, shape = Label2), size = 6, alpha = 0.8, stroke = 0.8) + 
+  scale_fill_manual(values=c(`Week 0 sputum` = "#0072B2", `Week 2 sputum` = "#E66900", `Log broth`= "#999999", `RIF` = "#D32F2F", `PZA` = "#008080", `INH` = "#808000", `EMB` = "#B39DDB")) +  
+  scale_shape_manual(values=c(`Sputum` = 21, `Log broth` = 22, `Drug`= 23)) + 
+  # geom_text_repel(aes(label = Week), size= 2.5, box.padding = 0.4, segment.color = NA, max.overlaps = Inf) + 
+  # geom_text(aes(label = SampleID)) + 
+  guides(fill = guide_legend(order = 1, override.aes = list(shape = 21)),
+         shape = guide_legend(order = 1)) +
+  labs(fill = "Sample Type", 
+       shape = "Sample Type",
+       title = "PCA: CPM, Sputum vs Drug transcriptomes (No batch correction)",
        x = paste0("PC1: ", summary_PCA[1,1], "%"),
        y = paste0("PC2: ", summary_PCA[2,1], "%")) +
   my_plot_themes
-# my_plot_themes_thumbnail
 fig_PC1vsPC2
+
+ggsave(fig_PC1vsPC2,
+       file = "PCA_SputumVsDrug_cpm.pdf",
+       path = "PCA_Figures",
+       width = 9, height = 6, units = "in")
+
+
+
+
+
+
