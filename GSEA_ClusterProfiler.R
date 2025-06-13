@@ -1,67 +1,102 @@
 # GSEA with CluterProfiler
 # E. Lamont
-# 4/21/25
+# 6/13/25
 
-### *** Won't work because they don't have Mtb as the organism.....
+# Got ChatGPT to help me with this one
 
-# https://learn.gencore.bio.nyu.edu/rna-seq-analysis/gene-set-enrichment-analysis/
-
-################################################
-################ LOAD PACKAGES #################
-
-BiocManager::install("clusterProfiler", version = "3.20")
-BiocManager::install("pathview")
-BiocManager::install("enrichplot")
+# BiocManager::install("clusterProfiler")
+# BiocManager::install("enrichplot")
 library(clusterProfiler)
 library(enrichplot)
-# we use ggplot2 to add x axis labels (ex: ridgeplot)
+library(dplyr)
 library(ggplot2)
 
-################################################
-################# LOAD DATA ####################
+# Prepare gene ranks
+rankings <- sign(W0.ComparedTo.Broth$LOG2FOLD)*(-log10(W0.ComparedTo.Broth$AVG_PVALUE))
+names(rankings) <- W0.ComparedTo.Broth$GENE_ID # genes as names#
+rankings <- sort(rankings, decreasing = TRUE) # sort genes by ranking
+plot(rankings)
+geneList <- rankings
 
-# This requires log2fold change data... from DEG...
+# Convert list to data.frame for clusterProfiler
+geneset_df <- stack(allGeneSetList$MTb.iModulons)
+colnames(geneset_df) <- c("gene", "set")  # must be columns named "gene" and "set"
 
-# Use W2.ComparedTo.W0
+geneset_df <- stack(allGeneSetList$MTb.iModulons)
+colnames(geneset_df) <- c("gene", "term")  # term = pathway name
+geneset_df <- geneset_df[, c("term", "gene")]  # TERM2GENE = (term, gene)
 
-################################################
-############### PREPARE INPUT ##################
+set.seed(42)
+gsea_res <- GSEA(
+  geneList = geneList,
+  TERM2GENE = geneset_df,
+  verbose = FALSE,
+  minGSSize = 2,
+  maxGSSize = 500,
+  pvalueCutoff = 1
+)
+head(as.data.frame(gsea_res))
 
-# reading in data from deseq2
-# df = read.csv("drosphila_example_de.csv", header=TRUE)
-df <- W2.ComparedTo.W0
+# Top plot
+ridgeplot(gsea_res, showCategory = 10)
 
-# we want the log2 fold change 
-# original_gene_list <- df$log2FoldChange
-original_gene_list <- df$LOG2FOLD
+fgseaResTidy2 <- gsea_res %>%
+  as_tibble() %>%
+  arrange(desc(NES))
 
-# name the vector
-# names(original_gene_list) <- df$X
-names(original_gene_list) <- df$GENE_ID
+ggplot(fgseaResTidy2, aes(reorder(ID, NES), NES)) +
+  geom_col(aes(fill=p.adjust<0.05)) +
+  coord_flip() +
+  labs(x="Pathway", y="Normalized Enrichment Score",
+       title="Hallmark pathways NES from GSEA") + 
+  theme_minimal()
 
-# omit any NA values 
-gene_list<-na.omit(original_gene_list)
-
-# sort the list in decreasing order (required for clusterProfiler)
-gene_list = sort(gene_list, decreasing = TRUE)
+upsetplot(gsea_res) 
 
 
-################################################
-########### GENE SET ENRICHMENT ################
 
-gse <- gseGO(geneList=gene_list, 
-             ont ="ALL", 
-             keyType = "ENSEMBL", 
-             nPerm = 10000, 
-             minGSSize = 3, 
-             maxGSSize = 800, 
-             pvalueCutoff = 0.05, 
-             verbose = TRUE, 
-             OrgDb = organism, 
-             pAdjustMethod = "none")
+top_terms <- gsea_res@result %>%
+  as_tibble() %>%
+  filter(p.adjust < 0.05) %>%
+  arrange(desc(abs(NES))) %>%
+  slice_head(n = 10) %>%
+  mutate(term = reorder(Description, NES))
 
-### Won't work because they don't have Mtb as the organism.....
+ggplot(top_terms, aes(x = NES, y = term, fill = p.adjust)) +
+  geom_col() +
+  scale_fill_gradient(low = "red", high = "blue", name = "Adjusted p-value") +
+  labs(
+    x = "Normalized Enrichment Score (NES)",
+    y = NULL,
+    title = "Top Enriched Pathways"
+  ) +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 10))
 
+
+###########################################################
+################## iModulon COLUMN PLOT ###################
+# Haven't gotten this to work yet
+
+
+
+GSEA_barPlot <- gsea_res %>% 
+  arrange(desc(NES)) %>%
+  ggplot(aes(reorder(Description, NES), NES)) + 
+  geom_col(aes(fill = p.adjust<0.05)) + 
+  geom_text(aes(y = -1.98, label = paste0("n = ", setSize)), hjust = 0, size = 2.5) +
+  scale_fill_manual(values=c("#999999", "red3")) + 
+  coord_flip() +
+  scale_y_continuous(limits = c(-2, 2), expand = c(0, 0)) +
+  labs(x="iModulon", y="Normalized Enrichment Score",
+       title="iModulons in W0 Sputum vs Log broth using ClusterProfiler",
+       subtitle = "min gene set size = 2") + 
+  my_plot_themes
+GSEA_barPlot
+ggsave(GSEA_barPlot,
+       file = "iModulons_fgsea_ColPlot_4.pdf",
+       path = "GSEA_Figures",
+       width = 18, height = 18, units = "in")
 
 
 

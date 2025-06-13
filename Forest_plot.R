@@ -80,8 +80,43 @@ plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
 printPlot(filename = "ForestPlot_Figures/ForestPlot_ClearTB_v3.pdf", width = 12, height = 8)
 
 
+###########################################################
+################# iModulons FOREST PLOT ###################
+
+plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
+                  geneSets = allGeneSetList$MTb.iModulons,
+                  max.show = 61,
+                  main = "iModulons Forest Plot H37Ra vs W0 sputum",
+                  left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
+                  xRange = 4, # Changes how far out the log2fold change axis goes
+                  text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
+# Save the plot
+printPlot(filename = "ForestPlot_Figures/ForestPlot_iModulons.pdf", width = 18, height = 20)
+
+# Save the .csv
+Forestplot_Ella <- plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
+                                     geneSets = allGeneSetList$MTb.iModulons,
+                                     max.show = 61,
+                                     main = "iModulons Forest Plot H37Ra vs W0 sputum",
+                                     left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
+                                     xRange = 4, # Changes how far out the log2fold change axis goes
+                                     text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
+write.csv(Forestplot_Ella,
+          file = "ForestPlot_Figures/ForestPlot_iModulons_data.csv")
 
 
+###########################################################
+################## Regulons FOREST PLOT ###################
+
+plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
+                  geneSets = allGeneSetList$MTb.Regulons,
+                  max.show = 30,
+                  main = "Regulons Forest Plot H37Ra vs W0 sputum",
+                  left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
+                  xRange = 4, # Changes how far out the log2fold change axis goes
+                  text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
+# Save the plot
+printPlot(filename = "ForestPlot_Figures/ForestPlot_iModulons.pdf", width = 18, height = 20)
 
 
 
