@@ -78,7 +78,7 @@ ColumnPlot <- MetaGeneSets_W0vsBroth_DOWN_iModulons %>%
 ColumnPlot
 ggsave(ColumnPlot,
        file = "iModulons_W0.MTb.MetaGeneSets.DOWN.pdf",
-       path = "GSEA_Figures",
+       path = "GSEA_Figures/MetaGeneSets",
        width = 18, height = 18, units = "in")
 
 # The two files combined 
@@ -86,10 +86,10 @@ ColumnPlot <- MetaGeneSets_W0vsBroth_ALL_iModulons %>%
   arrange(desc(LOG2FOLD)) %>%
   ggplot(aes(reorder(PathName, LOG2FOLD), LOG2FOLD)) + 
   geom_col(aes(fill = AVG_PVALUE < 0.05)) + 
-  # geom_text(aes(y = -1.98, label = paste0("n = ", size)), hjust = 0, size = 2.5) +
+  geom_text(aes(y = -3.48, label = paste0("n = ", N_Genes)), hjust = 0, size = 2.5) +
   scale_fill_manual(values=c("#999999", "red3")) + 
   coord_flip() +
-  # scale_y_continuous(limits = c(-2, 2), expand = c(0, 0)) +
+  scale_y_continuous(limits = c(-3.5, 3.5), expand = c(0, 0)) +
   labs(x="iModulon", y="LOG2FOLD",
        title="iModulons in W0 Sputum vs Log broth using UP and DOWN combined",
        subtitle = "The UP with LOG2FOLD > 0 and the DOWN with LOG2FOLD < 0") + 
@@ -97,7 +97,7 @@ ColumnPlot <- MetaGeneSets_W0vsBroth_ALL_iModulons %>%
 ColumnPlot
 ggsave(ColumnPlot,
        file = "iModulons_W0.MTb.MetaGeneSets.ALL.pdf",
-       path = "GSEA_Figures",
+       path = "GSEA_Figures/MetaGeneSets",
        width = 18, height = 18, units = "in")
 
 ###########################################################
@@ -143,7 +143,7 @@ ColumnPlot <- MetaGeneSets_W0vsBroth_UP_Regulons %>%
 ColumnPlot
 ggsave(ColumnPlot,
        file = "Regulons_W0.MTb.MetaGeneSets.UP.pdf",
-       path = "GSEA_Figures",
+       path = "GSEA_Figures/MetaGeneSets",
        width = 18, height = 30, units = "in")
 
 # The DOWN file
@@ -162,7 +162,7 @@ ColumnPlot <- MetaGeneSets_W0vsBroth_DOWN_Regulons %>%
 ColumnPlot
 ggsave(ColumnPlot,
        file = "Regulons_W0.MTb.MetaGeneSets.DOWN.pdf",
-       path = "GSEA_Figures",
+       path = "GSEA_Figures/MetaGeneSets",
        width = 18, height = 30, units = "in")
 
 # The two files combined 
@@ -181,5 +181,97 @@ ColumnPlot <- MetaGeneSets_W0vsBroth_ALL_Regulons %>%
 ColumnPlot
 ggsave(ColumnPlot,
        file = "Regulons_W0.MTb.MetaGeneSets.ALL.pdf",
-       path = "GSEA_Figures",
+       path = "GSEA_Figures/MetaGeneSets",
        width = 18, height = 30, units = "in")
+
+
+
+###########################################################
+############# TFOE.REGULONS: SUBSET THE DATA ##############
+
+# Why are the UP and DOWN just a little bit different?
+# I don't really understand this...
+# Or lets just plot them separately, not LOG2FOLD filtering
+
+MetaGeneSets_W0vsBroth_UP_TFOE.Regulons <- MetaGeneSets_W0vsBroth_UP %>% 
+  filter(str_detect(PathName, "TFOE.Regulons")) %>% 
+  filter(!str_detect(PathName, "ISB.Corems")) %>%
+  # filter(!str_detect(PathName, "TFOE.Regulons")) %>%
+  mutate(PathName = str_replace(PathName, "<.*", "")) %>% 
+  mutate(PathName = str_remove(PathName, "^TFOE\\.Regulons: ") %>% str_trim()) # Removes the beginning with TFOE.Regulons
+
+MetaGeneSets_W0vsBroth_DOWN_TFOE.Regulons <- MetaGeneSets_W0vsBroth_DOWN %>% 
+  filter(str_detect(PathName, "TFOE.Regulons")) %>% 
+  filter(!str_detect(PathName, "ISB.Corems")) %>%
+  # filter(!str_detect(PathName, "TFOE.Regulons")) %>%
+  mutate(PathName = str_replace(PathName, "<.*", "")) %>% 
+  mutate(PathName = str_remove(PathName, "^TFOE\\.Regulons: ") %>% str_trim()) # Removes the beginning with TFOE.Regulons
+
+# Combine the two 
+MetaGeneSets_W0vsBroth_ALL_TFOE.Regulons <- rbind(MetaGeneSets_W0vsBroth_UP_TFOE.Regulons %>% filter(LOG2FOLD >= 0), 
+                                                  MetaGeneSets_W0vsBroth_DOWN_TFOE.Regulons %>% filter(LOG2FOLD <= 0))
+
+
+###########################################################
+########### TFOE.REGULONS: MAKE A COLUMN PLOT #############
+
+# The UP file
+ColumnPlot <- MetaGeneSets_W0vsBroth_UP_TFOE.Regulons %>% 
+  arrange(desc(LOG2FOLD)) %>%
+  ggplot(aes(reorder(PathName, LOG2FOLD), LOG2FOLD)) + 
+  geom_col(aes(fill = AVG_PVALUE < 0.05)) + 
+  geom_text(aes(y = -4.48, label = paste0("n = ", N_Genes)), hjust = 0, size = 2.5) +
+  scale_fill_manual(values=c("#999999", "red3")) + 
+  coord_flip() +
+  scale_y_continuous(limits = c(-4.5, 4.5), expand = c(0, 0)) +
+  labs(x="TFOE.Regulons", y="LOG2FOLD",
+       title="TFOE.Regulons in W0 Sputum vs Log broth using W0.MTb.MetaGeneSets.UP.txt",
+       subtitle = NULL) + 
+  my_plot_themes
+ColumnPlot
+ggsave(ColumnPlot,
+       file = "TFOE.Regulons_W0.MTb.MetaGeneSets.UP.pdf",
+       path = "GSEA_Figures/MetaGeneSets",
+       width = 18, height = 30, units = "in")
+
+# The DOWN file
+ColumnPlot <- MetaGeneSets_W0vsBroth_DOWN_TFOE.Regulons %>% 
+  arrange(desc(LOG2FOLD)) %>%
+  ggplot(aes(reorder(PathName, LOG2FOLD), LOG2FOLD)) + 
+  geom_col(aes(fill = AVG_PVALUE < 0.05)) + 
+  geom_text(aes(y = -4.48, label = paste0("n = ", N_Genes)), hjust = 0, size = 2.5) +
+  scale_fill_manual(values=c("#999999", "red3")) + 
+  coord_flip() +
+  scale_y_continuous(limits = c(-4.5, 4.5), expand = c(0, 0)) +
+  labs(x="TFOE.Regulons", y="LOG2FOLD",
+       title="TFOE.Regulons in W0 Sputum vs Log broth using W0.MTb.MetaGeneSets.DOWN.txt",
+       subtitle = NULL) + 
+  my_plot_themes
+ColumnPlot
+ggsave(ColumnPlot,
+       file = "TFOE.Regulons_W0.MTb.MetaGeneSets.DOWN.pdf",
+       path = "GSEA_Figures/MetaGeneSets",
+       width = 18, height = 30, units = "in")
+
+# The two files combined 
+ColumnPlot <- MetaGeneSets_W0vsBroth_ALL_TFOE.Regulons %>% 
+  arrange(desc(LOG2FOLD)) %>%
+  ggplot(aes(reorder(PathName, LOG2FOLD), LOG2FOLD)) + 
+  geom_col(aes(fill = AVG_PVALUE < 0.05)) + 
+  geom_text(aes(y = -4.48, label = paste0("n = ", N_Genes)), hjust = 0, size = 2.5) +
+  scale_fill_manual(values=c("#999999", "red3")) + 
+  coord_flip() +
+  scale_y_continuous(limits = c(-4.5, 4.5), expand = c(0, 0)) +
+  labs(x="TFOE.Regulons", y="LOG2FOLD",
+       title="TFOE.Regulons in W0 Sputum vs Log broth using UP and DOWN combined",
+       subtitle = "The UP with LOG2FOLD > 0 and the DOWN with LOG2FOLD < 0") + 
+  my_plot_themes
+ColumnPlot
+ggsave(ColumnPlot,
+       file = "TFOE.Regulons_W0.MTb.MetaGeneSets.ALL.pdf",
+       path = "GSEA_Figures/MetaGeneSets",
+       width = 18, height = 30, units = "in")
+
+
+
+
