@@ -7,11 +7,11 @@
 # https://biostatsquid.com/fgsea-tutorial-gsea/
 # https://stephenturner.github.io/deseq-to-fgsea/#using_the_fgsea_package
 
+
 source("Import_data.R")
 
 library(fgsea)
-library(data.table)
-library(ggplot2)
+# library(data.table)
 
 # Plot basics
 my_plot_themes <- theme_bw() +
@@ -59,7 +59,7 @@ ggplot(data.frame(gene_symbol = names(rankings)[1:50], ranks = rankings[1:50]), 
 
 my_geneSet <- allGeneSetList$MTb.iModulons
 
-set.seed(42) # The p-values have some random changes going here...
+set.seed(23) # The p-values have some random changes going here...
 GSEAres <- fgsea(pathways = my_geneSet, # List of gene sets to check
                  stats = rankings,
                  scoreType = 'std', # in this case we have both pos and neg rankings. if only pos or neg, set to 'pos', 'neg'
@@ -72,7 +72,7 @@ GSEAres <- fgsea(pathways = my_geneSet, # List of gene sets to check
 head(GSEAres[order(pval), ])
 
 sum(GSEAres[, padj < 0.05]) # 9 significant pathways only when adjusting p-values
-sum(GSEAres[, pval < 0.05]) # 14 if not adjusted
+sum(GSEAres[, pval < 0.05]) # 18 if not adjusted
 
 topPathwaysUp <- GSEAres[ES > 0][head(order(pval), n = 4), pathway]
 topPathwaysDown <- GSEAres[ES < 0][head(order(pval), n = 4), pathway]
@@ -81,23 +81,6 @@ topPathways <- c(topPathwaysUp, rev(topPathwaysDown))
 plotGseaTable(my_geneSet[topPathways], stats = rankings, fgseaRes = GSEAres, gseaParam = 0.5)
 #dev.off()
 
-
-# https://stephenturner.github.io/deseq-to-fgsea/#using_the_fgsea_package
-
-set.seed(42)
-fgseaRes <- fgsea(pathways=my_geneSet, stats=rankings)
-# Bascially the same as above (if set.seed same would be the same)
-
-fgseaResTidy <- fgseaRes %>%
-  as_tibble() %>%
-  arrange(desc(NES))
-
-ggplot(fgseaResTidy, aes(reorder(pathway, NES), NES)) +
-  geom_col(aes(fill=padj<0.05)) +
-  coord_flip() +
-  labs(x="Pathway", y="Normalized Enrichment Score",
-       title="Hallmark pathways NES from GSEA") + 
-  theme_minimal()
 
 
 ###########################################################
@@ -119,18 +102,18 @@ GSEA_barPlot <- GSEAres %>%
   my_plot_themes
 GSEA_barPlot
 ggsave(GSEA_barPlot,
-       file = "iModulons_fgsea_ColPlot_4.pdf",
-       path = "GSEA_Figures",
+       file = "iModulons_W0vsBroth_fgsea.pdf",
+       path = "GSEA_Figures/fgsea_package",
        width = 18, height = 18, units = "in")
 
 
-# Just visualize the ones with NES > |1|
+# Just the significant ones
 GSEA_barPlot <- GSEAres %>% 
-  filter(abs(NES) >= 1) %>%
+  filter(padj < 0.05) %>%
   arrange(desc(NES)) %>% 
   ggplot(aes(reorder(pathway, NES), NES)) + 
   geom_col(aes(fill = padj<0.05)) + 
-  scale_fill_manual(values=c("#999999", "red3")) + 
+  scale_fill_manual(values=c("red3")) + 
   geom_text(aes(y = -1.98, label = paste0("n = ", size)), hjust = 0, size = 2.5) +
   coord_flip() +
   scale_y_continuous(limits = c(-2, 2), expand = c(0, 0)) +
@@ -140,21 +123,24 @@ GSEA_barPlot <- GSEAres %>%
   my_plot_themes
 GSEA_barPlot
 ggsave(GSEA_barPlot,
-       file = "iModulons_fgsea_ColPlot_subset.pdf",
-       path = "GSEA_Figures",
-       width = 18, height = 10, units = "in")
+       file = "iModulons_W0vsBroth_fgsea_SignificantOnly.pdf",
+       path = "GSEA_Figures/fgsea_package",
+       width = 18, height = 7, units = "in")
 
 
 ###########################################################
-############### Mtb.Regulons: RUN THE FGSEA ###############
+############### Mtb.Regulons: FGSEA + PLOT ################
 
-set.seed(42) # The p-values have some random changes going here...
+set.seed(23) # The p-values have some random changes going here...
 GSEAres_Regulons <- fgsea(pathways = allGeneSetList$MTb.Regulons, # List of gene sets to check
                  stats = rankings,
                  scoreType = 'std', # in this case we have both pos and neg rankings. if only pos or neg, set to 'pos', 'neg'
                  minSize = 2,
                  maxSize = 500,
                  nproc = 1) # for parallelisation
+
+sum(GSEAres_Regulons[, padj < 0.05]) # 7 significant pathways only when adjusting p-values
+sum(GSEAres_Regulons[, pval < 0.05]) # 30 if not adjusted
 
 GSEA_barPlot <- GSEAres_Regulons %>% 
   arrange(desc(NES)) %>%
@@ -170,12 +156,136 @@ GSEA_barPlot <- GSEAres_Regulons %>%
   my_plot_themes
 GSEA_barPlot
 ggsave(GSEA_barPlot,
-       file = "Regulons_fgsea_ColPlot_4.pdf",
-       path = "GSEA_Figures",
+       file = "Regulons_W0vsBroth_fgsea.pdf",
+       path = "GSEA_Figures/fgsea_package",
+       width = 18, height = 30, units = "in")
+
+# Just the significant ones
+GSEA_barPlot <- GSEAres_Regulons %>% 
+  filter(padj < 0.05) %>%
+  arrange(desc(NES)) %>% 
+  ggplot(aes(reorder(pathway, NES), NES)) + 
+  geom_col(aes(fill = padj<0.05)) + 
+  scale_fill_manual(values=c("red3")) + 
+  geom_text(aes(y = -1.98, label = paste0("n = ", size)), hjust = 0, size = 2.5) +
+  coord_flip() +
+  scale_y_continuous(limits = c(-2, 2), expand = c(0, 0)) +
+  labs(x="Regulon", y="Normalized Enrichment Score",
+       title="Regulons in W0 Sputum vs Log broth using fgsea",
+       subtitle = "min gene set size = 2") + 
+  my_plot_themes
+GSEA_barPlot
+ggsave(GSEA_barPlot,
+       file = "Regulons_W0vsBroth_fgsea_SignificantOnly.pdf",
+       path = "GSEA_Figures/fgsea_package",
+       width = 18, height = 7, units = "in")
+
+
+###########################################################
+############ Mtb.TFOE.Regulons: FGSEA + PLOT ##############
+
+set.seed(42) # The p-values have some random changes going here...
+GSEAres_TFOE.Regulons <- fgsea(pathways = allGeneSetList$MTb.TFOE.Regulons, # List of gene sets to check
+                          stats = rankings,
+                          scoreType = 'std', # in this case we have both pos and neg rankings. if only pos or neg, set to 'pos', 'neg'
+                          minSize = 2,
+                          maxSize = 500,
+                          nproc = 1) # for parallelisation
+
+sum(GSEAres_TFOE.Regulons[, padj < 0.05]) # 11 significant pathways only when adjusting p-values
+sum(GSEAres_TFOE.Regulons[, pval < 0.05]) # 31 if not adjusted
+
+GSEA_barPlot <- GSEAres_TFOE.Regulons %>% 
+  arrange(desc(NES)) %>%
+  ggplot(aes(reorder(pathway, NES), NES)) + 
+  geom_col(aes(fill = padj<0.05)) + 
+  geom_text(aes(y = -1.98, label = paste0("n = ", size)), hjust = 0, size = 2.5) +
+  scale_fill_manual(values=c("#999999", "red3")) + 
+  coord_flip() +
+  scale_y_continuous(limits = c(-2, 2), expand = c(0, 0)) +
+  labs(x="TFOE.Regulons", y="Normalized Enrichment Score",
+       title="TFOE.Regulons in W0 Sputum vs Log broth using fgsea",
+       subtitle = "min gene set size = 2") + 
+  my_plot_themes
+GSEA_barPlot
+ggsave(GSEA_barPlot,
+       file = "TFOE.Regulons_W0vsBroth_fgsea.pdf",
+       path = "GSEA_Figures/fgsea_package",
        width = 18, height = 30, units = "in")
 
 
+# Just the significant ones
+GSEA_barPlot <- GSEAres_TFOE.Regulons %>% 
+  filter(padj < 0.05) %>%
+  arrange(desc(NES)) %>% 
+  ggplot(aes(reorder(pathway, NES), NES)) + 
+  geom_col(aes(fill = padj<0.05)) + 
+  scale_fill_manual(values=c("red3")) + 
+  geom_text(aes(y = -1.98, label = paste0("n = ", size)), hjust = 0, size = 2.5) +
+  coord_flip() +
+  scale_y_continuous(limits = c(-2, 2), expand = c(0, 0)) +
+  labs(x="TFOE.Regulon", y="Normalized Enrichment Score",
+       title="TFOE.Regulons in W0 Sputum vs Log broth using fgsea",
+       subtitle = "min gene set size = 2") + 
+  my_plot_themes
+GSEA_barPlot
+ggsave(GSEA_barPlot,
+       file = "TFOE.Regulons_W0vsBroth_fgsea_SignificantOnly.pdf",
+       path = "GSEA_Figures/fgsea_package",
+       width = 18, height = 7, units = "in")
 
 
+###########################################################
+############ Tuberculist.GO.Ontology: FGSEA + PLOT ##############
+
+set.seed(23) # The p-values have some random changes going here...
+GSEAres_Tuberculist.GO.Ontology <- fgsea(pathways = allGeneSetList$MTb.Tuberculist.GO.Ontology, # List of gene sets to check
+                               stats = rankings,
+                               scoreType = 'std', # in this case we have both pos and neg rankings. if only pos or neg, set to 'pos', 'neg'
+                               minSize = 2,
+                               maxSize = 500,
+                               nproc = 1) # for parallelisation
+
+sum(GSEAres_Tuberculist.GO.Ontology[, padj < 0.05]) # 8 significant pathways only when adjusting p-values
+sum(GSEAres_Tuberculist.GO.Ontology[, pval < 0.05]) # 47 if not adjusted
+
+GSEA_barPlot <- GSEAres_Tuberculist.GO.Ontology %>% 
+  arrange(desc(NES)) %>%
+  ggplot(aes(reorder(pathway, NES), NES)) + 
+  geom_col(aes(fill = padj<0.05)) + 
+  geom_text(aes(y = -1.98, label = paste0("n = ", size)), hjust = 0, size = 2.5) +
+  scale_fill_manual(values=c("#999999", "red3")) + 
+  coord_flip() +
+  scale_y_continuous(limits = c(-2, 2), expand = c(0, 0)) +
+  labs(x="Tuberculist.GO.Ontology", y="Normalized Enrichment Score",
+       title="Tuberculist.GO.Ontology in W0 Sputum vs Log broth using fgsea",
+       subtitle = "min gene set size = 2") + 
+  my_plot_themes
+GSEA_barPlot
+ggsave(GSEA_barPlot,
+       file = "Tuberculist.GO.Ontology_W0vsBroth_fgsea.pdf",
+       path = "GSEA_Figures/fgsea_package",
+       width = 18, height = 49.9, units = "in")
+
+
+# Just the significant ones
+GSEA_barPlot <- GSEAres_Tuberculist.GO.Ontology %>% 
+  filter(padj < 0.05) %>%
+  arrange(desc(NES)) %>% 
+  ggplot(aes(reorder(pathway, NES), NES)) + 
+  geom_col(aes(fill = padj<0.05)) + 
+  scale_fill_manual(values=c("red3")) + 
+  geom_text(aes(y = -1.98, label = paste0("n = ", size)), hjust = 0, size = 2.5) +
+  coord_flip() +
+  scale_y_continuous(limits = c(-2, 2), expand = c(0, 0)) +
+  labs(x="Tuberculist.GO.Ontology", y="Normalized Enrichment Score",
+       title="Tuberculist.GO.Ontology in W0 Sputum vs Log broth using fgsea",
+       subtitle = "min gene set size = 2") + 
+  my_plot_themes
+GSEA_barPlot
+ggsave(GSEA_barPlot,
+       file = "Tuberculist.GO.Ontology_W0vsBroth_fgsea_SignificantOnly.pdf",
+       path = "GSEA_Figures/fgsea_package",
+       width = 18, height = 7, units = "in")
 
 
