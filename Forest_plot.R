@@ -119,7 +119,37 @@ plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
                   xRange = 4, # Changes how far out the log2fold change axis goes
                   text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
 # Save the plot
-printPlot(filename = "ForestPlot_Figures/ForestPlot_iModulons.pdf", width = 18, height = 20)
+printPlot(filename = "ForestPlot_Figures/ForestPlot_Regulons_Subset40.pdf", width = 18, height = 10)
+
+
+###########################################################
+############### TFOE.Regulons FOREST PLOT #################
+
+plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
+                  geneSets = allGeneSetList$MTb.TFOE.Regulons,
+                  max.show = 40,
+                  min.genes.per.set = 3, 
+                  main = "TFOE.Regulons Forest Plot H37Ra vs W0 sputum",
+                  left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
+                  xRange = 4, # Changes how far out the log2fold change axis goes
+                  text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
+# Save the plot
+printPlot(filename = "ForestPlot_Figures/ForestPlot_TFOE.Regulons_Subset40.pdf", width = 18, height = 10)
+
+
+###########################################################
+########## Tuberculist.GO.Ontology FOREST PLOT ############
+
+plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
+                  geneSets = allGeneSetList$MTb.Tuberculist.GO.Ontology,
+                  max.show = 40,
+                  min.genes.per.set = 3, 
+                  main = "Tuberculist.GO.Ontology Forest Plot H37Ra vs W0 sputum",
+                  left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
+                  xRange = 4, # Changes how far out the log2fold change axis goes
+                  text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
+# Save the plot
+printPlot(filename = "ForestPlot_Figures/ForestPlot_Tuberculist.GO.Ontology_Subset40.pdf", width = 18, height = 10)
 
 
 
