@@ -85,18 +85,20 @@ printPlot(filename = "ForestPlot_Figures/ForestPlot_ClearTB_v3.pdf", width = 12,
 
 plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
                   geneSets = allGeneSetList$MTb.iModulons,
-                  max.show = 61,
+                  max.show = 40,
+                  min.genes.per.set = 3, 
                   main = "iModulons Forest Plot H37Ra vs W0 sputum",
                   left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
                   xRange = 4, # Changes how far out the log2fold change axis goes
                   text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
 # Save the plot
-printPlot(filename = "ForestPlot_Figures/ForestPlot_iModulons.pdf", width = 18, height = 20)
+printPlot(filename = "ForestPlot_Figures/ForestPlot_iModulons_Subset40.pdf", width = 18, height = 10)
+printPlot(filename = "ForestPlot_Figures/ForestPlot_iModulons_Subset77.pdf", width = 18, height = 18)
 
 # Save the .csv
 Forestplot_Ella <- plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
                                      geneSets = allGeneSetList$MTb.iModulons,
-                                     max.show = 61,
+                                     max.show = 80,
                                      main = "iModulons Forest Plot H37Ra vs W0 sputum",
                                      left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
                                      xRange = 4, # Changes how far out the log2fold change axis goes
@@ -110,7 +112,8 @@ write.csv(Forestplot_Ella,
 
 plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
                   geneSets = allGeneSetList$MTb.Regulons,
-                  max.show = 30,
+                  max.show = 40,
+                  min.genes.per.set = 3, 
                   main = "Regulons Forest Plot H37Ra vs W0 sputum",
                   left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
                   xRange = 4, # Changes how far out the log2fold change axis goes
