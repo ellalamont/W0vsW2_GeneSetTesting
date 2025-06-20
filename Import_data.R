@@ -242,9 +242,14 @@ my_pipeSummary["Week"]
 
 `MetaGeneSets_W0vsBroth_UP` <- read.delim("MetaGeneSets_data/W0.MTb.MetaGeneSets.UP.txt")
 `MetaGeneSets_W0vsBroth_DOWN` <- read.delim("MetaGeneSets_data/W0.MTb.MetaGeneSets.DOWN.txt")
-
 # Combine the UP and DOWN
 MetaGeneSets_W0vsBroth <- rbind(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_W0vsBroth_DOWN)
+
+# The W2 vs broth data
+`MetaGeneSets_W2vsBroth_UP` <- read.delim("MetaGeneSets_data/W2.MTb.MetaGeneSets.UP.txt")
+`MetaGeneSets_W2vsBroth_DOWN` <- read.delim("MetaGeneSets_data/W2.MTb.MetaGeneSets.DOWN.txt")
+# Combine the UP and DOWN
+MetaGeneSets_W2vsBroth <- rbind(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_W0vsBroth_DOWN)
 
 
 

@@ -85,6 +85,7 @@ printPlot(filename = "ForestPlot_Figures/ForestPlot_ClearTB_v3.pdf", width = 12,
 
 plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
                   geneSets = allGeneSetList$MTb.iModulons,
+                  # geneSets = allGeneSetList$MTb.iModulons[str_detect(names(allGeneSetList$MTb.iModulons), pattern)], # Messing around here
                   max.show = 40,
                   min.genes.per.set = 3, 
                   main = "iModulons Forest Plot H37Ra vs W0 sputum",
@@ -152,20 +153,28 @@ plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
 printPlot(filename = "ForestPlot_Figures/ForestPlot_Tuberculist.GO.Ontology_Subset40.pdf", width = 18, height = 10)
 
 
+###########################################################
+############# CellWallSynthesis FOREST PLOT ###############
 
-
-##### TESTING FOR SHINY
-
-split_name <- strsplit("W0.ComparedTo.Broth", "\\.")[[1]] # Separate the df_name by the .
-Right_DataSet <- split_name[1]
-Left_DataSet  <- split_name[3]
-
-length(allGeneSetList$EllaGeneSets) # 5
-
-
-plotGeneSetForest(file = list_dfs[W0.ComparedTo.Broth],
-                  geneSets = allGeneSetList$EllaGeneSets,
-                  # main = "Ella Gene Sets Forest Plot H37Ra vs W0 sputum",
-                  # left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
+plotGeneSetForest(file = list_dfs$W0.ComparedTo.Broth,
+                  geneSets = allGeneSetList$CellWallSynthesis_GeneSets,
+                  max.show = 40,
+                  min.genes.per.set = 3, 
+                  main = "Cell Wall Synthesis Forest Plot H37Ra vs W0 sputum",
+                  left.label = "H37Ra broth (n=3)", right.label = "W0 sputum (n=3)",
                   xRange = 4, # Changes how far out the log2fold change axis goes
                   text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
+# Save the plot
+printPlot(filename = "ForestPlot_Figures/ForestPlot_W0vsBroth_CellWallSynthesis.pdf", width = 16, height = 8)
+
+plotGeneSetForest(file = list_dfs$W2.ComparedTo.Broth,
+                  geneSets = allGeneSetList$CellWallSynthesis_GeneSets,
+                  max.show = 40,
+                  min.genes.per.set = 3, 
+                  main = "Cell Wall Synthesis Forest Plot H37Ra vs W2 sputum",
+                  left.label = "H37Ra broth (n=3)", right.label = "W2 sputum (n=3)",
+                  xRange = 4, # Changes how far out the log2fold change axis goes
+                  text.cex = 1.1, pt.cex = 1.25, lwd = 3.5) 
+# Save the plot
+printPlot(filename = "ForestPlot_Figures/ForestPlot_W2vsBroth_CellWallSynthesis.pdf", width = 16, height = 8)
+
