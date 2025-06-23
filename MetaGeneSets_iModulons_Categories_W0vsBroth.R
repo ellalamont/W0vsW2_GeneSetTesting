@@ -56,7 +56,7 @@ MetaGeneSets_W0vsBroth_ALL_iModulons <- rbind(MetaGeneSets_W0vsBroth_UP_iModulon
 ###########################################################
 ############## iModulons: JUST CENTRAL CARBON #############
 
-CentralCarbon_iModulons <- c("Peptidoglycan Biosynthesis", "Central Carbon Metabolism", "Fumarate Reductase", "PrpR", "BkaR", "MprA", "Nicotinate Metabolism") # Needs the \\ to detect it
+CentralCarbon_iModulons <- c("Peptidoglycan Biosynthesis", "Central Carbon Metabolism", "Fumarate Reductase", "PrpR", "BkaR", "Nicotinate Metabolism") # Needs the \\ to detect it
 pattern <- str_c(CentralCarbon_iModulons, collapse = "|") # Collapse all the things I am interested in into a pattern separated by or
 
 # Filter
