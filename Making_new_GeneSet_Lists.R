@@ -163,6 +163,81 @@ save(allGeneSets, file = "GeneSet_Data/Mycobrowser_GeneSets.rda")
 
 
 ###########################################################
+################## CCM IMPORT FROM CSV ####################
+
+CCM_GeneSets <- read.csv("GeneSet_Data/CCM_GeneSets.csv")
+
+# Create a list where each GeneSet is a named element
+# Needs to be called allGeneSets so it is easier to load with all the others
+allGeneSets <- split(CCM_GeneSets$Gene, CCM_GeneSets$GeneSet)
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/CCM_GeneSets.rda")
+
+###########################################################
+############ CELL WALL SYNTHESIS IMPORT FROM CSV ##########
+
+CellWallSynthesis_GeneSets <- read.csv("GeneSet_Data/CellWallSynthesis_GeneSets.csv")
+
+# Create a list where each GeneSet is a named element
+# Needs to be called allGeneSets so it is easier to load with all the others
+allGeneSets <- split(CellWallSynthesis_GeneSets$Gene, CellWallSynthesis_GeneSets$GeneSet)
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/CellWallSynthesis_GeneSets.rda")
+
+###########################################################
+########### CELL WALL REMODELING IMPORT FROM CSV ##########
+
+CellWallRemodeling_GeneSets <- read.csv("GeneSet_Data/CellWallRemodeling_GeneSets.csv")
+
+# Create a list where each GeneSet is a named element
+# Needs to be called allGeneSets so it is easier to load with all the others
+allGeneSets <- split(CellWallRemodeling_GeneSets$Gene, CellWallRemodeling_GeneSets$GeneSet)
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/CellWallRemodeling_GeneSets.rda")
+
+###########################################################
+############### HYPOXIA RELATED IMPORT FROM CSV ###########
+
+HypoxiaRelated_GeneSets <- read.csv("GeneSet_Data/HypoxiaRelated_GeneSets.csv")
+
+# Create a list where each GeneSet is a named element
+# Needs to be called allGeneSets so it is easier to load with all the others
+allGeneSets <- split(HypoxiaRelated_GeneSets$Gene, HypoxiaRelated_GeneSets$GeneSet)
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/HypoxiaRelated_GeneSets.rda")
+
+###########################################################
+############### TOXIN RELATED IMPORT FROM CSV #############
+
+ToxinRelated_GeneSets <- read.csv("GeneSet_Data/ToxinRelated_GeneSets.csv")
+
+# Create a list where each GeneSet is a named element
+# Needs to be called allGeneSets so it is easier to load with all the others
+allGeneSets <- split(ToxinRelated_GeneSets$Gene, ToxinRelated_GeneSets$GeneSet)
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/ToxinRelated_GeneSets.rda")
+
+###########################################################
+############# PROTEIN SYNTHESIS IMPORT FROM CSV ###########
+
+ProteinSynthesis_GeneSets <- read.csv("GeneSet_Data/ProteinSynthesis_GeneSets.csv")
+
+# Create a list where each GeneSet is a named element
+# Needs to be called allGeneSets so it is easier to load with all the others
+allGeneSets <- split(ProteinSynthesis_GeneSets$Gene, ProteinSynthesis_GeneSets$GeneSet)
+
+# SAVE AS RDA FOR LATER 
+save(allGeneSets, file = "GeneSet_Data/ProteinSynthesis_GeneSets.rda")
+
+
+
+
+###########################################################
 ############# MAKE NEW LIST FROM OTHER LISTS ##############
 
 # For the CLEAR-TB, what pathways am I interested in 

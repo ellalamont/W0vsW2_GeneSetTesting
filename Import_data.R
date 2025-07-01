@@ -244,7 +244,6 @@ my_pipeSummary["Week"]
 
 `MetaGeneSets_W0vsBroth_UP` <- read.delim("MetaGeneSets_data/W0.MTb.MetaGeneSets.UP.txt")
 `MetaGeneSets_W0vsBroth_DOWN` <- read.delim("MetaGeneSets_data/W0.MTb.MetaGeneSets.DOWN.txt")
-
 # Combine the UP and DOWN
 # UP has a GSEA column, so removing that when binding
 MetaGeneSets_W0vsBroth <- bind_rows(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_W0vsBroth_DOWN) %>%
@@ -258,6 +257,12 @@ MetaGeneSets_W0vsBroth_test <- bind_rows(MetaGeneSets_W0vsBroth_UP, MetaGeneSets
   select(intersect(names(MetaGeneSets_W0vsBroth_UP), names(MetaGeneSets_BrothvsW0_UP)))
 
 
+
+# The W2 vs broth data
+`MetaGeneSets_W2vsBroth_UP` <- read.delim("MetaGeneSets_data/W2.MTb.MetaGeneSets.UP.txt")
+`MetaGeneSets_W2vsBroth_DOWN` <- read.delim("MetaGeneSets_data/W2.MTb.MetaGeneSets.DOWN.txt")
+# Combine the UP and DOWN
+MetaGeneSets_W2vsBroth <- rbind(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_W0vsBroth_DOWN)
 
 
 

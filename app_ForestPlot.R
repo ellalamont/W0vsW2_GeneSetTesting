@@ -74,6 +74,7 @@ server <- function(input, output, session){
                         geneSets = allGeneSetList[[input$my_GeneSetSource]],
                         main = input$my_DEG_file,
                         # max.show = 30,
+                        min.genes.per.set = 3,
                         left.label = paste0(Left_DataSet, " (n=3)"), 
                         right.label = paste0(Right_DataSet, " (n=3)"),
                         xRange = 3, # Changes how far out the log2fold change axis goes
