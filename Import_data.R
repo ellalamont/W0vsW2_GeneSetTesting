@@ -250,11 +250,11 @@ MetaGeneSets_W0vsBroth <- bind_rows(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_W0vs
   select(intersect(names(MetaGeneSets_W0vsBroth_UP), names(MetaGeneSets_W0vsBroth_DOWN)))
 
 # What about these other dataframes, are they more similar?
-`MetaGeneSets_BrothvsW0_UP` <- read.delim("MetaGeneSets_data/Broth.MTb.MetaGeneSets.UP.txt")
-`MetaGeneSets_BrothvsW0_DOWN` <- read.delim("MetaGeneSets_data/Broth.MTb.MetaGeneSets.DOWN.txt")
+# `MetaGeneSets_BrothvsW0_UP` <- read.delim("MetaGeneSets_data/Broth.MTb.MetaGeneSets.UP.txt")
+# `MetaGeneSets_BrothvsW0_DOWN` <- read.delim("MetaGeneSets_data/Broth.MTb.MetaGeneSets.DOWN.txt")
 
-MetaGeneSets_W0vsBroth_test <- bind_rows(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_BrothvsW0_UP) %>%
-  select(intersect(names(MetaGeneSets_W0vsBroth_UP), names(MetaGeneSets_BrothvsW0_UP)))
+# MetaGeneSets_W0vsBroth_test <- bind_rows(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_BrothvsW0_UP) %>%
+#   select(intersect(names(MetaGeneSets_W0vsBroth_UP), names(MetaGeneSets_BrothvsW0_UP)))
 
 
 

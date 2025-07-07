@@ -55,7 +55,8 @@ MetaGeneSets_W0vsBroth_DOWN_iModulons <- MetaGeneSets_W0vsBroth_DOWN %>%
 # There are 72 iModulons accounted for now, so lost some somewhere.....
 
 # Combine the two 
-MetaGeneSets_W0vsBroth_ALL_iModulons <- rbind(MetaGeneSets_W0vsBroth_UP_iModulons %>% filter(LOG2FOLD >= 0), MetaGeneSets_W0vsBroth_DOWN_iModulons %>% filter(LOG2FOLD <= 0))
+MetaGeneSets_W0vsBroth_ALL_iModulons <- bind_rows(MetaGeneSets_W0vsBroth_UP_iModulons %>% filter(LOG2FOLD >= 0), MetaGeneSets_W0vsBroth_DOWN_iModulons %>% filter(LOG2FOLD <= 0))
+# Need to use bind_rows because they don't have equal columns
 
 ###########################################################
 ############## iMODULONS: MAKE A COLUMN PLOT ##############
