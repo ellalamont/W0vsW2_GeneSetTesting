@@ -4,7 +4,7 @@
 
 # https://rpubs.com/tgjohnst/heatmaps_testing_1
 
-# source("Import_data.R")
+source("Import_data.R")
 # I've just imported the DEG values now, not the tpm.... I guess just start with these, compare everything to broth
 # No, this won't work because I need the replicates separated... need the tpm for all the samples...
 
@@ -58,11 +58,11 @@ my_tpm_W0vsBroth_matrix[1:10,]
 
 # Trying to subset based on gene set list
 
-testing <- my_tpm_W0vsBroth %>% subset(rownames(my_tpm_W0vsBroth) %in% MTb.TB.Phenotypes.TopGeneSets$`human_sputum: top 50 genes`) # Guess this doesn't need to be a matrix
+testing <- my_tpm_W0vsBroth %>% subset(rownames(my_tpm_W0vsBroth) %in% allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["human_sputum: top 25 genes"]]) # Guess this doesn't need to be a matrix
 
 pheatmap(testing, scale = "row")
 
-testing <- my_tpm %>% subset(rownames(my_tpm) %in% MTb.TB.Phenotypes.TopGeneSets$`human_sputum: top 50 genes`) # Guess this doesn't need to be a matrix
+testing <- my_tpm %>% subset(rownames(my_tpm) %in% allGeneSetList[["MTb.TB.Phenotypes.TopGeneSets"]][["human_sputum: top 25 genes"]]) # Guess this doesn't need to be a matrix
 
 
 pheatmap(testing, 
