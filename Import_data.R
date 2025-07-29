@@ -132,8 +132,8 @@ allGeneSetList <- lapply(allGeneSetList, function(gset) {
 ###########################################################
 ############### IMPORT H37Rv GENE ANNOTATION ##############
 
-gene_annot <- read.delim("H37Rv.txt")
-row.names(gene_annot) <- gene_annot$Locus.Tag
+# gene_annot <- read.delim("H37Rv.txt")
+# row.names(gene_annot) <- gene_annot$Locus.Tag
 
 
 
@@ -262,7 +262,8 @@ MetaGeneSets_W0vsBroth <- bind_rows(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_W0vs
 `MetaGeneSets_W2vsBroth_UP` <- read.delim("MetaGeneSets_data/W2.MTb.MetaGeneSets.UP.txt")
 `MetaGeneSets_W2vsBroth_DOWN` <- read.delim("MetaGeneSets_data/W2.MTb.MetaGeneSets.DOWN.txt")
 # Combine the UP and DOWN
-MetaGeneSets_W2vsBroth <- rbind(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_W0vsBroth_DOWN)
-
+# MetaGeneSets_W2vsBroth <- rbind(MetaGeneSets_W0vsBroth_UP, MetaGeneSets_W0vsBroth_DOWN)
+# Error in rbind(deparse.level, ...) : 
+#   numbers of columns of arguments do not match
 
 
